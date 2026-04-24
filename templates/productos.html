@@ -161,6 +161,16 @@
     .drawer-note { font-size: 0.72rem; color: rgba(245,242,236,0.35); line-height: 1.6; padding: 0.8rem; border: 1px solid rgba(201,168,76,0.1); margin-bottom: 1.5rem; background: rgba(201,168,76,0.04); }
     .drawer-note strong { color: var(--gold); }
 
+    .drawer-optional { margin-bottom: 1.2rem; }
+    .drawer-toggle { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; margin-bottom: 0.6rem; }
+    .drawer-toggle input[type="checkbox"] { appearance: none; width: 18px; height: 18px; border: 1px solid rgba(201,168,76,0.4); background: transparent; cursor: pointer; position: relative; flex-shrink: 0; transition: all 0.2s; }
+    .drawer-toggle input[type="checkbox"]:checked { background: var(--gold); border-color: var(--gold); }
+    .drawer-toggle input[type="checkbox"]:checked::after { content: '✓'; position: absolute; top: -1px; left: 2px; font-size: 13px; color: var(--black); font-weight: 700; }
+    .drawer-toggle-label { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(245,242,236,0.5); }
+    .drawer-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.2); color: var(--white); font-family: 'Barlow', sans-serif; font-size: 0.85rem; padding: 0.6rem 0.8rem; outline: none; transition: border-color 0.2s; display: none; }
+    .drawer-input:focus { border-color: var(--gold); }
+    .drawer-input.visible { display: block; }
+
     .drawer-wa-btn {
       display: flex; align-items: center; justify-content: center; gap: 0.6rem;
       width: 100%; padding: 1rem; background: #25D366; color: white;
@@ -297,6 +307,26 @@
 
       <div class="drawer-divider"></div>
 
+      <div class="drawer-section-label">Personalización (opcional)</div>
+
+      <div class="drawer-optional">
+        <label class="drawer-toggle">
+          <input type="checkbox" id="checkNombre" onchange="toggleInput('inputNombre', this)">
+          <span class="drawer-toggle-label">Agregar nombre en la espalda</span>
+        </label>
+        <input class="drawer-input" id="inputNombre" type="text" placeholder="Ej: GARCIA" maxlength="20" oninput="updateWaFromInputs()">
+      </div>
+
+      <div class="drawer-optional">
+        <label class="drawer-toggle">
+          <input type="checkbox" id="checkNumero" onchange="toggleInput('inputNumero', this)">
+          <span class="drawer-toggle-label">Agregar número</span>
+        </label>
+        <input class="drawer-input" id="inputNumero" type="number" placeholder="Ej: 10" min="1" max="99" oninput="updateWaFromInputs()">
+      </div>
+
+      <div class="drawer-divider"></div>
+
       <a class="drawer-wa-btn" id="drawerWa1" href="#" target="_blank">
         <svg viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10" fill="#25D366"/><path d="M8.5 8.5c0 0-1 2 .5 3.5S12.5 14.5 12.5 14.5l1-1c.5-.5 1 0 1.5.5L16 15c.5.5 0 1.5-.5 2s-3 .5-5.5-2S6.5 9 7 8.5 8.5 8.5 8.5 8.5z" fill="white"/></svg>
         Consultar por WhatsApp 1
@@ -356,7 +386,7 @@
           e.stopPropagation();
           grid.querySelectorAll('.talle-btn').forEach(b => b.classList.remove('selected'));
           btn.classList.add('selected');
-          updateWaLink(name, t, version, price);
+          updateWaFromInputs();
         };
         grid.appendChild(btn);
       });
@@ -368,14 +398,39 @@
       } else { note.style.display = 'none'; }
 
       updateWaLink(name, '', version, price);
+      document.getElementById('checkNombre').checked = false;
+      document.getElementById('checkNumero').checked = false;
+      document.getElementById('inputNombre').value = '';
+      document.getElementById('inputNumero').value = '';
+      document.getElementById('inputNombre').classList.remove('visible');
+      document.getElementById('inputNumero').classList.remove('visible');
       document.getElementById('drawer').classList.add('open');
       document.getElementById('drawerOverlay').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
 
-    function updateWaLink(name, talle, version, price) {
-      const talleText = talle ? ` - Talle ${talle}` : '';
-      const msg = encodeURIComponent(`Hola La Grada! Quiero consultar sobre:\n👕 ${name}${talleText}\n📦 Versión ${version}\n💰 Gs. ${price.toLocaleString('es-PY')}`);
+    function toggleInput(inputId, checkbox) {
+      const input = document.getElementById(inputId);
+      input.classList.toggle('visible', checkbox.checked);
+      if (!checkbox.checked) input.value = '';
+      updateWaFromInputs();
+    }
+
+    function updateWaFromInputs() {
+      const talle = document.querySelector('.talle-btn.selected')?.textContent || '';
+      const nombre = document.getElementById('checkNombre').checked ? document.getElementById('inputNombre').value : '';
+      const numero = document.getElementById('checkNumero').checked ? document.getElementById('inputNumero').value : '';
+      const name = document.getElementById('drawerName').textContent;
+      const version = document.getElementById('drawerVersion').textContent.replace('Versión ', '');
+      const price = document.getElementById('drawerPrice').textContent.replace('Gs. ', '').replace(/\./g, '');
+      updateWaLink(name, talle, version, parseInt(price), nombre, numero);
+    }
+
+    function updateWaLink(name, talle, version, price, nombre = '', numero = '') {
+      const talleText  = talle   ? `\n👕 Talle: ${talle}`      : '';
+      const nombreText = nombre  ? `\n✍️ Nombre: ${nombre}`     : '';
+      const numeroText = numero  ? `\n🔢 Número: ${numero}`     : '';
+      const msg = encodeURIComponent(`Hola La Grada! Quiero consultar sobre:\n🏷️ ${name}${talleText}${nombreText}${numeroText}\n📦 Versión ${version}\n💰 Gs. ${price.toLocaleString('es-PY')}`);
       document.getElementById('drawerWa1').href = `https://wa.me/595986304750?text=${msg}`;
       document.getElementById('drawerWa2').href = `https://wa.me/595971544874?text=${msg}`;
     }
