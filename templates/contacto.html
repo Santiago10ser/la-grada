@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/jpeg" href="/static/img/logo.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto – La Grada</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --gold: #c9a84c; --gold-light: #e8c97a; --black: #000; --black-soft: #0a0a0a; --black-mid: #111; --white: #f5f2ec; }
+    body { color: var(--white); font-family: 'Barlow', sans-serif; min-height: 100vh; position: relative; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; z-index: -2; background-image: url('/static/img/contacto.jpg'); background-size: cover; background-position: center; }
+    body::after  { content: ''; position: fixed; inset: 0; z-index: -1; background: rgba(0,0,0,0.6); }
+
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 3rem; border-bottom: 1px solid rgba(201,168,76,0.2); background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.15em; color: var(--white); text-decoration: none; }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,242,236,0.6); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.97); z-index: 199; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.1em; color: var(--white); text-decoration: none; }
+    .mobile-menu a:hover { color: var(--gold); }
+
+    .page-hero { padding: 4rem 3rem 2rem; }
+    .page-hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 8vw, 3.5rem); letter-spacing: 0.1em; }
+    .page-hero h1 span { color: var(--gold); }
+    .page-hero p { font-size: 0.75rem; color: rgba(245,242,236,0.4); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.4rem; }
+
+    .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; background: transparent; margin: 2.5rem 5rem; }
+
+    .wa-section { background: rgba(0,0,0,0.55); backdrop-filter: blur(8px); padding: 2rem 2.5rem; display: flex; flex-direction: column; justify-content: center; }
+    .wa-icon { width: 52px; height: 52px; margin-bottom: 1.5rem; }
+    .wa-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
+    .wa-text { font-size: 0.85rem; color: rgba(245,242,236,0.45); line-height: 1.7; margin-bottom: 2rem; }
+    .wa-number { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.08em; color: var(--gold); margin-bottom: 1.5rem; }
+    .wa-btn { display: inline-flex; align-items: center; gap: 0.6rem; background: #25D366; color: white; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; padding: 1rem 2rem; text-decoration: none; transition: background 0.2s, transform 0.15s; width: fit-content; }
+    .wa-btn:hover { background: #1db954; transform: translateY(-2px); }
+    .wa-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .wa-hours { margin-top: 1.5rem; font-size: 0.72rem; color: rgba(245,242,236,0.25); line-height: 2; }
+    .wa-hours strong { color: rgba(245,242,236,0.4); }
+
+    .redes-section { background: var(--black); padding: 3rem; }
+    .redes-section { background: rgba(0,0,0,0.55); backdrop-filter: blur(8px); padding: 2rem 2.5rem; }
+    .redes-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.08em; margin-bottom: 0.4rem; }
+    .redes-subtitle { font-size: 0.72rem; color: rgba(245,242,236,0.3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2rem; }
+    .red-card { display: flex; align-items: center; gap: 1.2rem; padding: 1.1rem; border: 1px solid rgba(201,168,76,0.1); margin-bottom: 0.6rem; text-decoration: none; color: var(--white); transition: border-color 0.2s, background 0.2s; }
+    .red-card:hover { border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.06); }
+    .red-icon { width: 42px; height: 42px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .red-icon svg { width: 20px; height: 20px; }
+    .ig-icon { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+    .fb-icon { background: #1877F2; }
+    .tk-icon { background: #111; border: 1px solid rgba(255,255,255,0.1); }
+    .yt-icon { background: #FF0000; }
+    .red-info { flex: 1; }
+    .red-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 0.06em; }
+    .red-handle { font-size: 0.68rem; color: rgba(245,242,236,0.3); margin-top: 2px; }
+    .red-arrow { color: rgba(245,242,236,0.15); transition: color 0.2s; }
+    .red-card:hover .red-arrow { color: var(--gold); }
+
+    .bottom-strip { margin: 0 5rem 3rem; padding: 1.5rem 2.5rem; background: rgba(0,0,0,0.55); backdrop-filter: blur(8px); }
+    .strip-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
+    .strip-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.06em; }
+    .strip-email { font-size: 0.85rem; color: rgba(245,242,236,0.35); margin-top: 0.3rem; }
+    .strip-email a { color: var(--gold); text-decoration: none; }
+    .strip-email a:hover { color: var(--gold-light); }
+
+    footer { border-top: 1px solid rgba(201,168,76,0.15); padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.15em; color: rgba(245,242,236,0.2); }
+    .footer-text { font-size: 0.7rem; color: rgba(245,242,236,0.2); }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .page-hero { padding: 3rem 1.5rem 2rem; }
+      .contact-layout { grid-template-columns: 1fr; margin: 1.5rem 1.5rem; }
+      .wa-section { padding: 2rem 1.5rem; }
+      .redes-section { padding: 2rem 1.5rem; }
+      .bottom-strip { margin: 0 1.5rem 2rem; padding: 1.5rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/productos" onclick="closeMobile()">Productos</a>
+    <a href="/novedades" onclick="closeMobile()">Novedades</a>
+    <a href="/contacto" onclick="closeMobile()">Contacto</a>
+  </div>
+
+  <nav>
+    <a href="/" class="nav-logo"><img src="/static/img/logo.jpg" alt="La Grada" style="height: 50px; object-fit: contain;"></a>
+    <div class="nav-links">
+      <a href="/productos">Productos</a>
+      <a href="/novedades">Novedades</a>
+      <a href="/contacto" class="active">Contacto</a>
+    </div>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <h1>HABLEMOS <span>HOY</span></h1>
+    <p>Estamos disponibles para ayudarte</p>
+  </div>
+
+  <div class="contact-layout">
+    <div class="wa-section">
+      <svg class="wa-icon" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" fill="#25D366"/>
+        <path d="M8.5 8.5c0 0-1 2 .5 3.5S12.5 14.5 12.5 14.5l1-1c.5-.5 1 0 1.5.5L16 15c.5.5 0 1.5-.5 2s-3 .5-5.5-2S6.5 9 7 8.5 8.5 8.5 8.5 8.5z" fill="white"/>
+      </svg>
+      <div class="wa-title">ESCRIBINOS POR WHATSAPP</div>
+      <p class="wa-text">La forma más rápida. Te respondemos en minutos para consultas sobre productos, tallas, disponibilidad y pedidos. También podés encargar camisetas a medida.</p>
+      <div class="wa-number">+595 986 304 750</div>
+      <a href="https://wa.me/595986304750?text=Hola%20La%20Grada%2C%20quiero%20consultar%20sobre%20una%20camiseta" class="wa-btn" target="_blank">
+        <svg viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5c0 0-1 2 .5 3.5S12.5 14.5 12.5 14.5l1-1c.5-.5 1 0 1.5.5L16 15c.5.5 0 1.5-.5 2s-3 .5-5.5-2S6.5 9 7 8.5 8.5 8.5 8.5 8.5z" fill="#25D366"/></svg>
+        Iniciar conversación
+      </a>
+      <div class="wa-hours">
+        <strong>WhatsApp 1:</strong> +595 986 304 750<br>
+        <strong>WhatsApp 2:</strong> +595 971 544 874<br><br>
+        <strong>Lunes a viernes</strong> · 8:00 – 20:00<br>
+        <strong>Sábados</strong> · 9:00 – 17:00<br>
+        <strong>Domingos</strong> · Cerrado
+      </div>
+    </div>
+
+    <div class="redes-section">
+      <div class="redes-title">SEGUINOS EN REDES</div>
+      <div class="redes-subtitle">Contenido diario, promos exclusivas y más</div>
+      <a href="https://instagram.com/lagradapy" class="red-card" target="_blank">
+        <div class="red-icon ig-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg></div>
+        <div class="red-info"><div class="red-name">Instagram</div><div class="red-handle">@lagradapy</div></div>
+        <span class="red-arrow">→</span>
+      </a>
+      <a href="https://facebook.com/lagradapy" class="red-card" target="_blank">
+        <div class="red-icon fb-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></div>
+        <div class="red-info"><div class="red-name">Facebook</div><div class="red-handle">La Grada Paraguay</div></div>
+        <span class="red-arrow">→</span>
+      </a>
+      <a href="https://tiktok.com/@lagrada_py" class="red-card" target="_blank">
+        <div class="red-icon tk-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg></div>
+        <div class="red-info"><div class="red-name">TikTok</div><div class="red-handle">@lagrada_py</div></div>
+        <span class="red-arrow">→</span>
+      </a>
+      <a href="https://youtube.com/@lagradapy" class="red-card" target="_blank">
+        <div class="red-icon yt-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#FF0000"/></svg></div>
+        <div class="red-info"><div class="red-name">YouTube</div><div class="red-handle">La Grada PY</div></div>
+        <span class="red-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <div class="strip-label">También podés escribirnos</div>
+    <div class="strip-title">CORREO ELECTRÓNICO</div>
+    <div class="strip-email"><a href="mailto:info@lagrada.com.py">info@lagrada.com.py</a></div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">La Grada</div>
+    <div class="footer-text">© 2025 La Grada – Todos los derechos reservados</div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('hamburger').classList.toggle('open');
+      document.getElementById('mobileMenu').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMobile() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  </script>
+</body>
+</html>

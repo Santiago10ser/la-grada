@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/jpeg" href="/static/img/logo.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Novedades – La Grada</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --gold: #c9a84c; --gold-light: #e8c97a; --black: #000; --black-soft: #0a0a0a; --black-mid: #111; --white: #f5f2ec; }
+    body { color: var(--white); font-family: 'Barlow', sans-serif; min-height: 100vh; position: relative; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; z-index: -2; background-image: url('/static/img/novedades.jpg'); background-size: cover; background-position: center; }
+    body::after  { content: ''; position: fixed; inset: 0; z-index: -1; background: rgba(0,0,0,0.6); }
+
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 3rem; border-bottom: 1px solid rgba(201,168,76,0.2); background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.15em; color: var(--white); text-decoration: none; }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,242,236,0.6); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.97); z-index: 199; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.1em; color: var(--white); text-decoration: none; }
+    .mobile-menu a:hover { color: var(--gold); }
+
+    .page-hero { padding: 4rem 3rem 2rem; }
+    .page-hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 8vw, 3.5rem); letter-spacing: 0.1em; }
+    .page-hero h1 span { color: var(--gold); }
+    .page-hero p { font-size: 0.75rem; color: rgba(245,242,236,0.4); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.4rem; }
+
+    .tabs { display: flex; border-bottom: 1px solid rgba(201,168,76,0.2); padding: 0 3rem; background: transparent; overflow-x: auto; }
+    .tab { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 1rem 1.5rem; color: rgba(245,242,236,0.4); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; text-decoration: none; white-space: nowrap; }
+    .tab:hover { color: var(--white); }
+    .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    .featured { margin: 2.5rem 3rem 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(201,168,76,0.08); }
+    .featured-img { background: rgba(0,0,0,0.3); aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; min-height: 200px; }
+    .featured-img svg { width: 35%; height: 35%; opacity: 0.12; }
+    .featured-badge { position: absolute; top: 1rem; left: 1rem; background: var(--gold); color: var(--black); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; font-weight: 600; }
+    .featured-body { background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); padding: 2.5rem; display: flex; flex-direction: column; justify-content: center; }
+    .featured-cat { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    .featured-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.5rem, 4vw, 2.2rem); letter-spacing: 0.06em; line-height: 1.1; margin-bottom: 1rem; }
+    .featured-text { font-size: 0.85rem; color: rgba(245,242,236,0.5); line-height: 1.7; margin-bottom: 1.5rem; }
+    .featured-date { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,242,236,0.25); }
+
+    .promo-banner { margin: 2rem 3rem; padding: 2rem 2.5rem; border: 1px solid rgba(201,168,76,0.3); display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); }
+    .promo-tag { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+    .promo-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.5rem, 4vw, 2rem); letter-spacing: 0.08em; }
+    .promo-desc { font-size: 0.78rem; color: rgba(245,242,236,0.45); margin-top: 0.3rem; }
+    .promo-btn { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; background: var(--gold); color: var(--black); padding: 0.75rem 2rem; text-decoration: none; font-weight: 600; transition: background 0.2s; white-space: nowrap; }
+    .promo-btn:hover { background: var(--gold-light); }
+
+    .section-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,242,236,0.3); padding: 2rem 3rem 1rem; border-top: 1px solid rgba(201,168,76,0.1); margin-top: 2rem; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1px; background: rgba(201,168,76,0.08); margin: 0 3rem; }
+    .card { background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); padding: 1.5rem; cursor: pointer; transition: background 0.2s; }
+    .card:hover { background: rgba(0,0,0,0.65); }
+    .card-type { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.6rem; display: inline-block; padding: 3px 8px; }
+    .type-promo { background: rgba(139,0,0,0.3); color: #e07070; }
+    .type-producto { background: rgba(201,168,76,0.15); color: var(--gold); }
+    .type-noticia { background: rgba(255,255,255,0.06); color: rgba(245,242,236,0.6); }
+    .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.05em; line-height: 1.15; margin-bottom: 0.5rem; }
+    .card-text { font-size: 0.78rem; color: rgba(245,242,236,0.4); line-height: 1.6; margin-bottom: 1rem; }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; }
+    .card-date { font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(245,242,236,0.2); }
+    .card-arrow { color: var(--gold); opacity: 0; transition: opacity 0.2s; }
+    .card:hover .card-arrow { opacity: 1; }
+
+    footer { border-top: 1px solid rgba(201,168,76,0.15); padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.15em; color: rgba(245,242,236,0.2); }
+    .footer-text { font-size: 0.7rem; color: rgba(245,242,236,0.2); }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .page-hero { padding: 3rem 1.5rem 2rem; }
+      .tabs { padding: 0 1.5rem; }
+      .featured { grid-template-columns: 1fr; margin: 1.5rem 1.5rem 0; }
+      .featured-body { padding: 1.5rem; }
+      .promo-banner { margin: 1.5rem; padding: 1.5rem; flex-direction: column; align-items: flex-start; }
+      .section-label { padding: 1.5rem 1.5rem 0.75rem; }
+      .cards-grid { grid-template-columns: 1fr; margin: 0 1.5rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/productos" onclick="closeMobile()">Productos</a>
+    <a href="/novedades" onclick="closeMobile()">Novedades</a>
+    <a href="/contacto" onclick="closeMobile()">Contacto</a>
+  </div>
+
+  <nav>
+    <a href="/" class="nav-logo"><img src="/static/img/logo.jpg" alt="La Grada" style="height: 50px; object-fit: contain;"></a>
+    <div class="nav-links">
+      <a href="/productos">Productos</a>
+      <a href="/novedades" class="active">Novedades</a>
+      <a href="/contacto">Contacto</a>
+    </div>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <h1>ÚLTIMAS <span>NOVEDADES</span></h1>
+    <p>Noticias, lanzamientos y promos de La Grada</p>
+  </div>
+
+
+
+  <div class="featured">
+    <div class="featured-img">
+      <span class="featured-badge">Destacado</span>
+      <svg viewBox="0 0 300 320" fill="#c9a84c"><path d="M90 10 L30 70 L60 90 L60 290 L240 290 L240 90 L270 70 L210 10 L180 30 C170 55 130 55 120 30 Z"/></svg>
+    </div>
+    <div class="featured-body">
+      <div class="featured-cat">Lanzamiento</div>
+      <div class="featured-title">NUEVAS CAMISETAS 25/26 YA DISPONIBLES</div>
+      <p class="featured-text">Llegaron las camisetas de la temporada 2025/2026 — Francia, Argentina, España, Brasil, Portugal y Alemania en versión Jugador. También Cerro Porteño y Olimpia en versión Fan.</p>
+      <div class="featured-date">Temporada 2025/2026</div>
+    </div>
+  </div>
+
+  <div class="promo-banner">
+    <div>
+      <div class="promo-tag">Promo vigente</div>
+      <div class="promo-title">COMPRÁ 2 CAMISETAS Y LLEVATE UN LLAVERO DEL MUNDIAL</div>
+      <p class="promo-desc">De regalo con tu compra. Stock limitado — ¡aprovechá antes que se agote!</p>
+    </div>
+    <a href="/productos" class="promo-btn">Ver camisetas →</a>
+  </div>
+
+  <div class="section-label">Más novedades</div>
+  <div class="cards-grid">
+    <div class="card"><span class="card-type type-noticia">Aviso importante</span><div class="card-title">CONSEJO DE TALLE — VERSIÓN JUGADOR</div><p class="card-text">La versión Jugador tiene corte ajustado. Recomendamos pedir un talle más grande del que usás normalmente para mayor comodidad.</p><div class="card-footer"><span class="card-date">Temporada 25/26</span><span class="card-arrow">→</span></div></div>
+    <div class="card"><span class="card-type type-producto">Encargos</span><div class="card-title">¿NO ENCONTRÁS LO QUE BUSCÁS?</div><p class="card-text">Podemos encargar cualquier camiseta a medida. Elegí equipo, talle, nombre, número y parches. Entrega en 20 a 30 días.</p><div class="card-footer"><span class="card-date">Siempre disponible</span><span class="card-arrow">→</span></div></div>
+    <div class="card"><span class="card-type type-noticia">Info</span><div class="card-title">ENVÍOS CON SEGUIMIENTO A TODO PARAGUAY</div><p class="card-text">Mandamos a todo el país. Cada envío tiene seguimiento para que sepas dónde está tu camiseta en todo momento.</p><div class="card-footer"><span class="card-date">Todo el país</span><span class="card-arrow">→</span></div></div>
+    <div class="card"><span class="card-type type-producto">Nuevo</span><div class="card-title">OLIMPIA 2026 LOCAL YA EN STOCK</div><p class="card-text">La nueva camiseta de Olimpia para la temporada 2026 ya está disponible en tallas M, L y XL. Versión Fan a Gs. 180.000.</p><div class="card-footer"><span class="card-date">Disponible ahora</span><span class="card-arrow">→</span></div></div>
+    <div class="card"><span class="card-type type-noticia">Cuidado</span><div class="card-title">CÓMO CUIDAR TU CAMISETA</div><p class="card-text">Lavá siguiendo la etiqueta, guardá en lugar fresco y seco, planchá del revés a baja temperatura. Nunca uses lavandina ni secadora.</p><div class="card-footer"><span class="card-date">Tips de cuidado</span><span class="card-arrow">→</span></div></div>
+    <div class="card"><span class="card-type type-promo">Promoción</span><div class="card-title">MESSI #10 Y RONALDO #7 DISPONIBLES</div><p class="card-text">Las camisetas con nombre y número de los cracks están en stock. Argentina con Messi y Portugal con Ronaldo a Gs. 280.000.</p><div class="card-footer"><span class="card-date">Stock limitado</span><span class="card-arrow">→</span></div></div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">La Grada</div>
+    <div class="footer-text">© 2025 La Grada – Todos los derechos reservados</div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('hamburger').classList.toggle('open');
+      document.getElementById('mobileMenu').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMobile() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  </script>
+</body>
+</html>

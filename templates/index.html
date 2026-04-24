@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/jpeg" href="/static/img/logo.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Grada – Pasión que se viste</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --gold-dark: #9a7a2e;
+      --black: #000000;
+      --black-soft: #0a0a0a;
+      --black-mid: #111111;
+      --white: #f5f2ec;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: 'Barlow', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 3rem;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.92), transparent);
+      transition: background 0.3s;
+    }
+    nav.scrolled { background: rgba(0,0,0,0.97); border-bottom: 1px solid rgba(201,168,76,0.2); }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.15em; color: var(--white); text-decoration: none; }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,242,236,0.6); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* Hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.97); z-index: 199;
+      flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.1em; color: var(--white); text-decoration: none; transition: color 0.2s; }
+    .mobile-menu a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; height: 100vh; min-height: 600px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('/static/img/hero.jpg');
+      background-size: cover; background-position: center;
+      z-index: 0;
+    }
+    .hero-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(0,0,0,0.5) 0%,
+        rgba(0,0,0,0.3) 40%,
+        rgba(0,0,0,0.7) 80%,
+        rgba(0,0,0,0.95) 100%);
+    }
+    /* Fallback si no hay imagen */
+    .hero-bg-fallback {
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, #1a1200 0%, #000 70%);
+    }
+
+    .hero-content { position: relative; z-index: 2; padding: 0 1rem; animation: fadeUp 1s ease both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    .hero-eyebrow { font-size: 0.7rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; animation: fadeUp 1s 0.1s ease both; opacity: 0; }
+    .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(4.5rem, 18vw, 11rem); line-height: 0.9; letter-spacing: 0.05em; animation: fadeUp 1s 0.2s ease both; opacity: 0; }
+    .hero-title .gold { color: var(--gold); text-shadow: 0 0 40px rgba(201,168,76,0.4); }
+    .hero-subtitle { font-size: clamp(0.65rem, 2vw, 0.8rem); letter-spacing: 0.35em; text-transform: uppercase; color: rgba(245,242,236,0.5); margin-top: 1.2rem; animation: fadeUp 1s 0.35s ease both; opacity: 0; }
+    .hero-divider { width: 60px; height: 1px; background: var(--gold); margin: 2rem auto; animation: fadeUp 1s 0.45s ease both; opacity: 0; }
+    .hero-cta {
+      display: inline-block; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--black); background: var(--gold); padding: 1rem 2.8rem;
+      text-decoration: none; font-weight: 600; transition: background 0.25s, transform 0.2s;
+      animation: fadeUp 1s 0.55s ease both; opacity: 0;
+    }
+    .hero-cta:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    /* ── FEATURES ── */
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(201,168,76,0.25); }
+    .feature { padding: 2.5rem 2rem; border-right: 1px solid rgba(201,168,76,0.15); text-align: center; background: var(--black-soft); transition: background 0.2s; }
+    .feature:last-child { border-right: none; }
+    .feature:hover { background: var(--black-mid); }
+    .feature-icon { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; }
+    .feature-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.4rem; }
+    .feature-text { font-size: 0.78rem; color: rgba(245,242,236,0.4); line-height: 1.6; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid rgba(201,168,76,0.2); padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; background: var(--black); }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.15em; color: rgba(245,242,236,0.25); }
+    .footer-text { font-size: 0.7rem; color: rgba(245,242,236,0.2); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .hero-eyebrow { opacity: 1; }
+      .hero-title { opacity: 1; }
+      .hero-subtitle { opacity: 1; }
+      .hero-divider { opacity: 1; }
+      .hero-cta { opacity: 1; padding: 0.9rem 2rem; }
+
+      .features { grid-template-columns: 1fr; }
+      .feature { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.1); padding: 1.8rem 1.5rem; }
+      .feature:last-child { border-bottom: none; }
+
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.2rem 1.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      nav { padding: 0.9rem 1.2rem; }
+      .nav-logo { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mobile menu overlay -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/productos" onclick="closeMobile()">Productos</a>
+    <a href="/novedades" onclick="closeMobile()">Novedades</a>
+    <a href="/contacto" onclick="closeMobile()">Contacto</a>
+  </div>
+
+  <nav id="navbar">
+    <a href="/" class="nav-logo"><img src="/static/img/logo.jpg" alt="La Grada" style="height: 50px; object-fit: contain;"></a>
+    <div class="nav-links">
+      <a href="/productos">Productos</a>
+      <a href="/novedades">Novedades</a>
+      <a href="/contacto">Contacto</a>
+    </div>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg-fallback"></div>
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Temporada 2025</p>
+      <h1 class="hero-title">LA <span class="gold">GRADA</span></h1>
+      <p class="hero-subtitle">Pasión que se viste</p>
+      <div class="hero-divider"></div>
+      <a href="/productos" class="hero-cta">Ver productos</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">La Grada</div>
+    <div class="footer-text">© 2025 La Grada – Todos los derechos reservados</div>
+  </footer>
+
+  <script>
+    // Navbar scroll
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+    // Mobile menu
+    function toggleMenu() {
+      document.getElementById('hamburger').classList.toggle('open');
+      document.getElementById('mobileMenu').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMobile() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  </script>
+</body>
+</html>
