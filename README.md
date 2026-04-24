@@ -1,34 +1,28 @@
-# La Grada – Sitio web
+# La Grada 🏟️
+**Pasión que se viste** — Tienda de camisetas de fútbol en Asunción, Paraguay.
 
-## Requisitos
-- Python 3.8+
+## Stack
+- FastAPI + Jinja2
+- HTML / CSS vanilla
+- Imágenes en Cloudinary
 
-## Instalación
-
+## Correr localmente
 ```bash
 pip install -r requirements.txt
-```
-
-## Ejecutar el servidor
-
-```bash
-cd lagrada
 uvicorn main:app --reload
 ```
-
-Luego abrir en el navegador: http://localhost:8000
 
 ## Estructura
 ```
 lagrada/
-├── main.py              # Servidor FastAPI
-├── requirements.txt     # Dependencias
+├── main.py
+├── requirements.txt
+├── Procfile
 ├── templates/
-│   ├── index.html       # Página principal (hero)
-│   └── productos.html   # Catálogo de productos
-└── static/              # Archivos estáticos (CSS, JS, imágenes)
+│   ├── index.html
+│   ├── productos.html
+│   ├── novedades.html
+│   └── contacto.html
+└── static/
+    └── img/
 ```
-
-## Páginas
-- `/`           → Página principal con hero "La Grada"
-- `/productos`  → Catálogo con filtros por categoría
