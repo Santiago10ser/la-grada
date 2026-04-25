@@ -34,6 +34,10 @@ async def home(request: Request):
 async def novedades(request: Request):
     return templates.TemplateResponse(request, "novedades.html")
 
+@app.get("/encargos", response_class=HTMLResponse)
+async def encargos(request: Request):
+    return templates.TemplateResponse(request, "encargos.html")
+
 @app.get("/contacto", response_class=HTMLResponse)
 async def contacto(request: Request):
     return templates.TemplateResponse(request, "contacto.html")

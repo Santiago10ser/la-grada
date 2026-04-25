@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/jpeg" href="/static/img/logo.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encargos – La Grada</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --gold: #c9a84c; --gold-light: #e8c97a; --black: #000; --white: #f5f2ec; }
+
+    body { color: var(--white); font-family: 'Barlow', sans-serif; min-height: 100vh; position: relative; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; z-index: -2; background-image: url('/static/img/hero.jpg'); background-size: cover; background-position: center; }
+    body::after  { content: ''; position: fixed; inset: 0; z-index: -1; background: rgba(0,0,0,0.65); }
+
+    /* NAV */
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 3rem; border-bottom: 1px solid rgba(201,168,76,0.2); background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 100; }
+    .nav-logo { text-decoration: none; }
+    .nav-logo img { height: 50px; object-fit: contain; }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,242,236,0.6); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.97); z-index: 199; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.1em; color: var(--white); text-decoration: none; }
+    .mobile-menu a:hover { color: var(--gold); }
+
+    /* HERO */
+    .page-hero { padding: 4rem 3rem 2rem; }
+    .page-hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 8vw, 3.5rem); letter-spacing: 0.1em; }
+    .page-hero h1 span { color: var(--gold); }
+    .page-hero p { font-size: 0.8rem; color: rgba(245,242,236,0.45); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.4rem; }
+
+    /* PASOS */
+    .steps-section { padding: 0 3rem 2rem; }
+    .steps-title { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,242,236,0.3); margin-bottom: 1.5rem; }
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1px; background: rgba(201,168,76,0.08); }
+    .step { background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); padding: 1.5rem; }
+    .step-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: rgba(201,168,76,0.25); line-height: 1; margin-bottom: 0.5rem; }
+    .step-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.06em; color: var(--gold); margin-bottom: 0.4rem; }
+    .step-text { font-size: 0.75rem; color: rgba(245,242,236,0.45); line-height: 1.6; }
+
+    /* FORMULARIO */
+    .form-section { margin: 0 3rem 2rem; }
+    .form-box { background: rgba(0,0,0,0.55); backdrop-filter: blur(10px); padding: 2.5rem; }
+    .form-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+    .form-subtitle { font-size: 0.75rem; color: rgba(245,242,236,0.35); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2rem; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,242,236,0.4); }
+    .form-input, .form-select {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.2);
+      color: var(--white); font-family: 'Barlow', sans-serif; font-size: 0.9rem;
+      padding: 0.7rem 0.9rem; outline: none; transition: border-color 0.2s; width: 100%;
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--gold); }
+    .form-select option { background: #111; color: var(--white); }
+    .form-input::placeholder { color: rgba(245,242,236,0.2); }
+
+    .form-note { font-size: 0.7rem; color: rgba(245,242,236,0.25); line-height: 1.6; padding: 0.8rem; border: 1px solid rgba(201,168,76,0.1); background: rgba(201,168,76,0.04); margin-top: 1rem; grid-column: 1 / -1; }
+    .form-note strong { color: var(--gold); }
+
+    .wa-send-btn {
+      display: flex; align-items: center; justify-content: center; gap: 0.7rem;
+      width: 100%; padding: 1rem; background: #25D366; color: white;
+      font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+      font-weight: 600; border: none; cursor: pointer; margin-top: 1.5rem;
+      transition: background 0.2s; text-decoration: none;
+    }
+    .wa-send-btn:hover { background: #1db954; }
+    .wa-send-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .wa-send-btn2 { display: flex; align-items: center; justify-content: center; gap: 0.7rem; width: 100%; padding: 0.8rem; background: transparent; border: 1px solid rgba(37,211,102,0.4); color: #25D366; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; text-decoration: none; transition: all 0.2s; margin-top: 0.5rem; }
+    .wa-send-btn2:hover { background: rgba(37,211,102,0.08); }
+
+    /* FOOTER */
+    footer { border-top: 1px solid rgba(201,168,76,0.15); padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); margin-top: 2rem; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.15em; color: rgba(245,242,236,0.2); }
+    .footer-text { font-size: 0.7rem; color: rgba(245,242,236,0.2); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .page-hero { padding: 2.5rem 1.5rem 1.5rem; }
+      .steps-section { padding: 0 1.5rem 1.5rem; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .form-section { margin: 0 1.5rem 1.5rem; }
+      .form-box { padding: 1.5rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/productos" onclick="closeMobile()">Productos</a>
+    <a href="/novedades" onclick="closeMobile()">Novedades</a>
+    <a href="/encargos" onclick="closeMobile()">Encargos</a>
+    <a href="/contacto" onclick="closeMobile()">Contacto</a>
+  </div>
+
+  <nav>
+    <a href="/" class="nav-logo"><img src="/static/img/logo.jpg" alt="La Grada"></a>
+    <div class="nav-links">
+      <a href="/productos">Productos</a>
+      <a href="/novedades">Novedades</a>
+      <a href="/encargos" class="active">Encargos</a>
+      <a href="/contacto">Contacto</a>
+    </div>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <h1>¿NO ENCONTRÁS LO QUE <span>BUSCÁS?</span></h1>
+    <p>Encargamos cualquier camiseta · Entrega en 20 a 30 días</p>
+  </div>
+
+  <div class="steps-section">
+    <div class="steps-title">Cómo funciona</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Completá el formulario</div>
+        <p class="step-text">Elegí equipo, versión, talle y los extras que quieras.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Envianos por WhatsApp</div>
+        <p class="step-text">Con un clic te mandamos directo al chat con tu pedido listo.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Confirmamos y encargamos</div>
+        <p class="step-text">Te avisamos el precio final y coordinamos el pago.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Recibís tu camiseta</div>
+        <p class="step-text">En 20 a 30 días la tenés en tus manos, donde estés en Paraguay.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-box">
+      <div class="form-title">HACÉ TU ENCARGO</div>
+      <div class="form-subtitle">Completá los datos y te contactamos</div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Equipo / Selección *</label>
+          <input class="form-input" id="fEquipo" type="text" placeholder="Ej: Barcelona, Brasil, Olimpia...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Temporada *</label>
+          <input class="form-input" id="fTemporada" type="text" placeholder="Ej: 2025/26">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Versión *</label>
+          <select class="form-select" id="fVersion">
+            <option value="">Seleccioná...</option>
+            <option>Jugador</option>
+            <option>Fan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Talle *</label>
+          <select class="form-select" id="fTalle">
+            <option value="">Seleccioná...</option>
+            <option>P</option>
+            <option>M</option>
+            <option>L</option>
+            <option>XL</option>
+            <option>2XL</option>
+            <option>3XL</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nombre en la espalda (opcional)</label>
+          <input class="form-input" id="fNombre" type="text" placeholder="Ej: GARCIA" maxlength="20">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Número (opcional)</label>
+          <input class="form-input" id="fNumero" type="number" placeholder="Ej: 10" min="1" max="99">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Parche (opcional)</label>
+          <input class="form-input" id="fParche" type="text" placeholder="Ej: Libertadores, Copa del Mundo...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cantidad *</label>
+          <input class="form-input" id="fCantidad" type="number" placeholder="Ej: 2" min="1" max="99" value="1">
+        </div>
+        <div class="form-note full">
+          <strong>⚠ Consejo de talle:</strong> La versión Jugador tiene corte ajustado. Recomendamos pedir un talle más grande del habitual.
+        </div>
+      </div>
+
+      <a class="wa-send-btn" id="btnWa1" href="#" onclick="return buildWaLink(1)" target="_blank">
+        <svg viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10" fill="#25D366"/><path d="M8.5 8.5c0 0-1 2 .5 3.5S12.5 14.5 12.5 14.5l1-1c.5-.5 1 0 1.5.5L16 15c.5.5 0 1.5-.5 2s-3 .5-5.5-2S6.5 9 7 8.5 8.5 8.5 8.5 8.5z" fill="white"/></svg>
+        Enviar encargo por WhatsApp 1
+      </a>
+      <a class="wa-send-btn2" id="btnWa2" href="#" onclick="return buildWaLink(2)" target="_blank">
+        Enviar por WhatsApp 2 · +595 971 544 874
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">La Grada</div>
+    <div class="footer-text">© 2025 La Grada – Todos los derechos reservados</div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('hamburger').classList.toggle('open');
+      document.getElementById('mobileMenu').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMobile() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function buildWaLink(num) {
+      const equipo    = document.getElementById('fEquipo').value.trim();
+      const temporada = document.getElementById('fTemporada').value.trim();
+      const version   = document.getElementById('fVersion').value;
+      const talle     = document.getElementById('fTalle').value;
+      const nombre    = document.getElementById('fNombre').value.trim();
+      const numero    = document.getElementById('fNumero').value.trim();
+      const parche    = document.getElementById('fParche').value.trim();
+      const cantidad  = document.getElementById('fCantidad').value.trim();
+
+      if (!equipo || !version || !talle) {
+        alert('Por favor completá al menos: Equipo, Versión y Talle.');
+        return false;
+      }
+
+      let msg = `Hola La Grada! Quiero hacer un encargo:\n`;
+      msg += `⚽ Equipo: ${equipo}`;
+      if (temporada) msg += ` ${temporada}`;
+      msg += `\n📦 Versión: ${version}`;
+      msg += `\n👕 Talle: ${talle}`;
+      if (nombre)   msg += `\n✍️ Nombre: ${nombre}`;
+      if (numero)   msg += `\n🔢 Número: ${numero}`;
+      if (parche)   msg += `\n🏅 Parche: ${parche}`;
+      msg += `\n🔢 Cantidad: ${cantidad || 1}`;
+
+      const encoded = encodeURIComponent(msg);
+      const phone = num === 1 ? '595986304750' : '595971544874';
+      window.open(`https://wa.me/${phone}?text=${encoded}`, '_blank');
+      return false;
+    }
+  </script>
+</body>
+</html>
