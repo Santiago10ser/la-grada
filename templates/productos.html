@@ -325,6 +325,14 @@
         <input class="drawer-input" id="inputNumero" type="number" placeholder="Ej: 10" min="1" max="99" oninput="updateWaFromInputs()">
       </div>
 
+      <div class="drawer-optional">
+        <label class="drawer-toggle">
+          <input type="checkbox" id="checkParche" onchange="toggleInput('inputParche', this)">
+          <span class="drawer-toggle-label">Agregar parche</span>
+        </label>
+        <input class="drawer-input" id="inputParche" type="text" placeholder="Ej: Libertadores, Copa del Mundo...(Entienda señor que no le podemos poner la de la libertadores a cerro)" maxlength="40" oninput="updateWaFromInputs()">
+      </div>
+
       <div class="drawer-divider"></div>
 
       <a class="drawer-wa-btn" id="drawerWa1" href="#" target="_blank">
@@ -400,10 +408,13 @@
       updateWaLink(name, '', version, price);
       document.getElementById('checkNombre').checked = false;
       document.getElementById('checkNumero').checked = false;
+      document.getElementById('checkParche').checked = false;
       document.getElementById('inputNombre').value = '';
       document.getElementById('inputNumero').value = '';
+      document.getElementById('inputParche').value = '';
       document.getElementById('inputNombre').classList.remove('visible');
       document.getElementById('inputNumero').classList.remove('visible');
+      document.getElementById('inputParche').classList.remove('visible');
       document.getElementById('drawer').classList.add('open');
       document.getElementById('drawerOverlay').classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -417,20 +428,22 @@
     }
 
     function updateWaFromInputs() {
-      const talle = document.querySelector('.talle-btn.selected')?.textContent || '';
+      const talle  = document.querySelector('.talle-btn.selected')?.textContent || '';
       const nombre = document.getElementById('checkNombre').checked ? document.getElementById('inputNombre').value : '';
       const numero = document.getElementById('checkNumero').checked ? document.getElementById('inputNumero').value : '';
-      const name = document.getElementById('drawerName').textContent;
+      const parche = document.getElementById('checkParche').checked ? document.getElementById('inputParche').value : '';
+      const name    = document.getElementById('drawerName').textContent;
       const version = document.getElementById('drawerVersion').textContent.replace('Versión ', '');
-      const price = document.getElementById('drawerPrice').textContent.replace('Gs. ', '').replace(/\./g, '');
-      updateWaLink(name, talle, version, parseInt(price), nombre, numero);
+      const price   = document.getElementById('drawerPrice').textContent.replace('Gs. ', '').replace(/\./g, '');
+      updateWaLink(name, talle, version, parseInt(price), nombre, numero, parche);
     }
 
-    function updateWaLink(name, talle, version, price, nombre = '', numero = '') {
-      const talleText  = talle   ? `\n👕 Talle: ${talle}`      : '';
-      const nombreText = nombre  ? `\n✍️ Nombre: ${nombre}`     : '';
-      const numeroText = numero  ? `\n🔢 Número: ${numero}`     : '';
-      const msg = encodeURIComponent(`Hola La Grada! Quiero consultar sobre:\n🏷️ ${name}${talleText}${nombreText}${numeroText}\n📦 Versión ${version}\n💰 Gs. ${price.toLocaleString('es-PY')}`);
+    function updateWaLink(name, talle, version, price, nombre = '', numero = '', parche = '') {
+      const talleText  = talle  ? `\n👕 Talle: ${talle}`          : '';
+      const nombreText = nombre ? `\n✍️ Nombre: ${nombre}`         : '';
+      const numeroText = numero ? `\n🔢 Número: ${numero}`         : '';
+      const parcheText = parche ? `\n🏅 Parche: ${parche}`         : '';
+      const msg = encodeURIComponent(`Hola La Grada! Quiero consultar sobre:\n🏷️ ${name}${talleText}${nombreText}${numeroText}${parcheText}\n📦 Versión ${version}\n💰 Gs. ${price.toLocaleString('es-PY')}`);
       document.getElementById('drawerWa1').href = `https://wa.me/595986304750?text=${msg}`;
       document.getElementById('drawerWa2').href = `https://wa.me/595971544874?text=${msg}`;
     }
