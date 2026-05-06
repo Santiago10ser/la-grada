@@ -11,7 +11,7 @@ templates = Jinja2Templates(directory="templates")
 
 products = [
     # SELECCIONES - Versión Jugador
-    {"id": 1,  "name": "Francia 25/26 Local",             "category": "Selecciones", "price": 250000, "tag": None,  "tallas": "M, L, XL", "version": "Jugador", "color": "#002395", "img": "https://res.cloudinary.com/dfwgsepcm/image/upload/v1777120281/RemereFrancia_vlemby.jpg"},
+    {"id": 1,  "name": "Francia 25/26 Local",             "category": "Selecciones", "price": 250000, "tag": None,  "tallas": "M, L, XL", "version": "Jugador", "color": "#002395", "img": "https://res.cloudinary.com/dfwgsepcm/image/upload/v1777120281/RemeraFrancia_vlemby.jpg"},
     {"id": 2,  "name": "Argentina 25/26 Visitante",       "category": "Selecciones", "price": 250000, "tag": None,  "tallas": "M, L, XL", "version": "Jugador", "color": "#74acdf", "img": "https://res.cloudinary.com/dfwgsepcm/image/upload/v1777120281/RemeraArgentinaVisitante_qwlfl7.jpg"},
     {"id": 11, "name": "Argentina 25/26 Local",           "category": "Selecciones", "price": 250000, "tag": None,  "tallas": "M, L, XL", "version": "Jugador", "color": "#74acdf", "img": "https://images.unsplash.com/photo-1580087256394-dc596e1c8f4f?w=400&h=530&fit=crop"},
     {"id": 3,  "name": "Argentina 25/26 — Messi #10",     "category": "Selecciones", "price": 280000, "tag": None,  "tallas": "M, L, XL", "version": "Jugador", "color": "#74acdf", "img": "https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=400&h=530&fit=crop"},
