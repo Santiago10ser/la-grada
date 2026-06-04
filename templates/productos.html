@@ -171,6 +171,9 @@
     .drawer-input:focus { border-color: var(--gold); }
     .drawer-input.visible { display: block; }
 
+    .drawer-personalizar-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; padding: 0.85rem; border: 1px solid rgba(201,168,76,0.4); background: transparent; color: var(--gold); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600; text-decoration: none; transition: all 0.2s; margin-bottom: 0; }
+    .drawer-personalizar-btn:hover { background: rgba(201,168,76,0.08); border-color: var(--gold); }
+
     .drawer-wa-btn {
       display: flex; align-items: center; justify-content: center; gap: 0.6rem;
       width: 100%; padding: 1rem; background: #25D366; color: white;
@@ -309,31 +312,7 @@
 
       <div class="drawer-divider"></div>
 
-      <div class="drawer-section-label">Personalización (opcional)</div>
-
-      <div class="drawer-optional">
-        <label class="drawer-toggle">
-          <input type="checkbox" id="checkNombre" onchange="toggleInput('inputNombre', this)">
-          <span class="drawer-toggle-label">Agregar nombre en la espalda</span>
-        </label>
-        <input class="drawer-input" id="inputNombre" type="text" placeholder="Ej: GARCIA" maxlength="20" oninput="updateWaFromInputs()">
-      </div>
-
-      <div class="drawer-optional">
-        <label class="drawer-toggle">
-          <input type="checkbox" id="checkNumero" onchange="toggleInput('inputNumero', this)">
-          <span class="drawer-toggle-label">Agregar número</span>
-        </label>
-        <input class="drawer-input" id="inputNumero" type="number" placeholder="Ej: 10" min="1" max="99" oninput="updateWaFromInputs()">
-      </div>
-
-      <div class="drawer-optional">
-        <label class="drawer-toggle">
-          <input type="checkbox" id="checkParche" onchange="toggleInput('inputParche', this)">
-          <span class="drawer-toggle-label">Agregar parche</span>
-        </label>
-        <input class="drawer-input" id="inputParche" type="text" placeholder="Ej: Libertadores, Copa del Mundo..." maxlength="40" oninput="updateWaFromInputs()">
-      </div>
+      <a href="/encargos" class="drawer-personalizar-btn">✏️ Personalizar camiseta</a>
 
       <div class="drawer-divider"></div>
 
