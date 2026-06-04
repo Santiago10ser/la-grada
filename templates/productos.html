@@ -265,7 +265,7 @@
               <div class="product-cat">{{ p.category }}</div>
               <div class="product-footer">
                 <div class="product-price">Gs. {{ "{:,}".format(p.price) }}</div>
-                <button class="add-btn">+</button>
+                <button class="add-btn" onclick="openDrawer(this.closest('.product-card'))">+</button>
               </div>
             </div>
           </div>
@@ -375,7 +375,7 @@
           e.stopPropagation();
           grid.querySelectorAll('.talle-btn').forEach(b => b.classList.remove('selected'));
           btn.classList.add('selected');
-          updateWaFromInputs();
+          updateWaLink(name, t, version, price);
         };
         grid.appendChild(btn);
       });
@@ -387,44 +387,14 @@
       } else { note.style.display = 'none'; }
 
       updateWaLink(name, '', version, price);
-      document.getElementById('checkNombre').checked = false;
-      document.getElementById('checkNumero').checked = false;
-      document.getElementById('checkParche').checked = false;
-      document.getElementById('inputNombre').value = '';
-      document.getElementById('inputNumero').value = '';
-      document.getElementById('inputParche').value = '';
-      document.getElementById('inputNombre').classList.remove('visible');
-      document.getElementById('inputNumero').classList.remove('visible');
-      document.getElementById('inputParche').classList.remove('visible');
       document.getElementById('drawer').classList.add('open');
       document.getElementById('drawerOverlay').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
 
-    function toggleInput(inputId, checkbox) {
-      const input = document.getElementById(inputId);
-      input.classList.toggle('visible', checkbox.checked);
-      if (!checkbox.checked) input.value = '';
-      updateWaFromInputs();
-    }
-
-    function updateWaFromInputs() {
-      const talle  = document.querySelector('.talle-btn.selected')?.textContent || '';
-      const nombre = document.getElementById('checkNombre').checked ? document.getElementById('inputNombre').value : '';
-      const numero = document.getElementById('checkNumero').checked ? document.getElementById('inputNumero').value : '';
-      const parche = document.getElementById('checkParche').checked ? document.getElementById('inputParche').value : '';
-      const name    = document.getElementById('drawerName').textContent;
-      const version = document.getElementById('drawerVersion').textContent.replace('Versión ', '');
-      const price   = document.getElementById('drawerPrice').textContent.replace('Gs. ', '').replace(/\./g, '');
-      updateWaLink(name, talle, version, parseInt(price), nombre, numero, parche);
-    }
-
-    function updateWaLink(name, talle, version, price, nombre = '', numero = '', parche = '') {
-      const talleText  = talle  ? `\n👕 Talle: ${talle}`          : '';
-      const nombreText = nombre ? `\n✍️ Nombre: ${nombre}`         : '';
-      const numeroText = numero ? `\n🔢 Número: ${numero}`         : '';
-      const parcheText = parche ? `\n🏅 Parche: ${parche}`         : '';
-      const msg = encodeURIComponent(`Hola La Grada! Quiero consultar sobre:\n🏷️ ${name}${talleText}${nombreText}${numeroText}${parcheText}\n📦 Versión ${version}\n💰 Gs. ${price.toLocaleString('es-PY')}`);
+    function updateWaLink(name, talle, version, price) {
+      const talleText = talle ? `\n👕 Talle: ${talle}` : '';
+      const msg = encodeURIComponent(`Hola La Grada! Quiero consultar sobre:\n🏷️ ${name}${talleText}\n📦 Versión ${version}\n💰 Gs. ${price.toLocaleString('es-PY')}`);
       document.getElementById('drawerWa1').href = `https://wa.me/595986304750?text=${msg}`;
       document.getElementById('drawerWa2').href = `https://wa.me/595971544874?text=${msg}`;
     }
