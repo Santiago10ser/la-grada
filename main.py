@@ -1,8 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Form, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.requests import Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from supabase import create_client
 import os
 from dotenv import load_dotenv
@@ -10,7 +9,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = FastAPI()
-
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
@@ -18,7 +16,16 @@ SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+ADMIN_USER = "admin"
+ADMIN_PASS = "LagradaPy_10"
+ADMIN_TOKEN = "lagrada_admin_secret_token"
+
 categorias = ["Todos", "Selecciones", "Paraguay"]
+
+def is_admin(request: Request):
+    return request.cookies.get("admin_token") == ADMIN_TOKEN
+
+# ── TIENDA ──────────────────────────────────────────────────
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
@@ -46,11 +53,72 @@ async def productos(request: Request, categoria: str = "Todos"):
         products = response.data
     except Exception as e:
         products = []
-        print(f"Error fetching products: {e}")
-
+        print(f"Error: {e}")
     return templates.TemplateResponse(request, "productos.html", {
         "products": products,
         "categorias": categorias,
         "categoria_actual": categoria,
         "total": len(products)
     })
+
+# ── ADMIN AUTH ──────────────────────────────────────────────
+
+@app.get("/admin/login", response_class=HTMLResponse)
+async def admin_login_page(request: Request):
+    if is_admin(request):
+        return RedirectResponse("/admin", status_code=302)
+    return templates.TemplateResponse(request, "admin_login.html", {"error": None})
+
+@app.post("/admin/login")
+async def admin_login(request: Request, username: str = Form(...), password: str = Form(...)):
+    if username == ADMIN_USER and password == ADMIN_PASS:
+        response = RedirectResponse("/admin", status_code=302)
+        response.set_cookie("admin_token", ADMIN_TOKEN, httponly=True, max_age=86400)
+        return response
+    return templates.TemplateResponse(request, "admin_login.html", {"error": "Usuario o contraseña incorrectos"})
+
+@app.get("/admin/logout")
+async def admin_logout():
+    response = RedirectResponse("/admin/login", status_code=302)
+    response.delete_cookie("admin_token")
+    return response
+
+# ── ADMIN PANEL ─────────────────────────────────────────────
+
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_panel(request: Request):
+    if not is_admin(request):
+        return RedirectResponse("/admin/login", status_code=302)
+    return templates.TemplateResponse(request, "admin.html")
+
+# ── ADMIN API ───────────────────────────────────────────────
+
+@app.get("/admin/api/productos")
+async def api_get_productos(request: Request):
+    if not is_admin(request):
+        return JSONResponse({"error": "No autorizado"}, status_code=401)
+    res = supabase.table("productos").select("*").execute()
+    return JSONResponse(res.data)
+
+@app.post("/admin/api/productos")
+async def api_add_producto(request: Request):
+    if not is_admin(request):
+        return JSONResponse({"error": "No autorizado"}, status_code=401)
+    data = await request.json()
+    res = supabase.table("productos").insert(data).execute()
+    return JSONResponse(res.data)
+
+@app.put("/admin/api/productos/{id}")
+async def api_update_producto(id: int, request: Request):
+    if not is_admin(request):
+        return JSONResponse({"error": "No autorizado"}, status_code=401)
+    data = await request.json()
+    res = supabase.table("productos").update(data).eq("id", id).execute()
+    return JSONResponse(res.data)
+
+@app.delete("/admin/api/productos/{id}")
+async def api_delete_producto(id: int, request: Request):
+    if not is_admin(request):
+        return JSONResponse({"error": "No autorizado"}, status_code=401)
+    supabase.table("productos").delete().eq("id", id).execute()
+    return JSONResponse({"ok": True})
