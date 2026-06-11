@@ -47,9 +47,9 @@ async def contacto(request: Request):
 async def productos(request: Request, categoria: str = "Todos"):
     try:
         if categoria == "Todos":
-            response = supabase.table("productos").select("*").execute()
+            response = supabase.table("productos").select("*").order("orden").execute()
         else:
-            response = supabase.table("productos").select("*").eq("category", categoria).execute()
+            response = supabase.table("productos").select("*").eq("category", categoria).order("orden").execute()
         products = response.data
     except Exception as e:
         products = []
@@ -99,6 +99,15 @@ async def api_get_productos(request: Request):
         return JSONResponse({"error": "No autorizado"}, status_code=401)
     res = supabase.table("productos").select("*").execute()
     return JSONResponse(res.data)
+
+@app.post("/admin/api/productos/reorder")
+async def api_reorder_productos(request: Request):
+    if not is_admin(request):
+        return JSONResponse({"error": "No autorizado"}, status_code=401)
+    updates = await request.json()
+    for item in updates:
+        supabase.table("productos").update({"orden": item["orden"]}).eq("id", item["id"]).execute()
+    return JSONResponse({"ok": True})
 
 @app.post("/admin/api/productos")
 async def api_add_producto(request: Request):
