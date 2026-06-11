@@ -63,6 +63,7 @@
     .tag-badge { font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; font-weight: 600; }
     .tag-new { background: var(--gold); color: var(--black); }
     .tag-sale { background: #8b0000; color: var(--white); }
+    .tag-destacado { background: #1a3a5c; color: #7ec8e3; border: 1px solid #7ec8e3; }
     .tag-none { color: rgba(245,242,236,0.25); font-size: 0.75rem; }
     .action-btn { font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.35rem 0.8rem; border: none; cursor: pointer; transition: all 0.2s; font-weight: 600; }
     .edit-btn { background: rgba(201,168,76,0.15); color: var(--gold); margin-right: 4px; }
@@ -206,6 +207,7 @@
               <option value="">Sin tag</option>
               <option value="new">Nuevo</option>
               <option value="sale">Oferta</option>
+              <option value="destacado">Destacado</option>
             </select>
           </div>
         </div>
@@ -281,7 +283,7 @@
           <td style="color:var(--gold); font-weight:600;">Gs. ${parseInt(p.price).toLocaleString('es-PY')}</td>
           <td style="font-size:0.75rem;">${p.version || '—'}</td>
           <td style="font-size:0.75rem; color:rgba(245,242,236,0.5);">${p.tallas || '—'}</td>
-          <td>${p.tag ? `<span class="tag-badge tag-${p.tag}">${p.tag === 'new' ? 'Nuevo' : 'Oferta'}</span>` : '<span class="tag-none">—</span>'}</td>
+          <td>${p.tag === 'new' ? '<span class="tag-badge tag-new">Nuevo</span>' : p.tag === 'sale' ? '<span class="tag-badge tag-sale">Oferta</span>' : p.tag === 'destacado' ? '<span class="tag-badge tag-destacado">Destacado</span>' : '<span class="tag-none">—</span>'}</td>
           <td>
             <button class="action-btn edit-btn" onclick="editProduct(${p.id})">Editar</button>
             <button class="action-btn delete-btn" onclick="deleteProduct(${p.id}, '${p.name.replace(/'/g, "\\'")}')">Borrar</button>

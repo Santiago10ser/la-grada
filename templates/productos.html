@@ -90,6 +90,7 @@
     .product-badge { position: absolute; top: 12px; left: 12px; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; font-weight: 600; z-index: 2; }
     .badge-new  { background: var(--gold); color: var(--black); }
     .badge-sale { background: #8b0000; color: var(--white); }
+    .badge-destacado { background: #1a3a5c; color: #7ec8e3; border: 1px solid #7ec8e3; }
 
     .product-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem 1.1rem; z-index: 2; }
     .product-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.06em; margin-bottom: 0.15rem; color: var(--white); }
@@ -258,7 +259,8 @@
           onclick="openDrawer(this)">
           <div class="product-visual">
             {% if p.tag == 'new' %}<span class="product-badge badge-new">Nuevo</span>
-            {% elif p.tag == 'sale' %}<span class="product-badge badge-sale">Oferta</span>{% endif %}
+            {% elif p.tag == 'sale' %}<span class="product-badge badge-sale">Oferta</span>
+            {% elif p.tag == 'destacado' %}<span class="product-badge badge-destacado">Destacado</span>{% endif %}
             <img src="{{ p.img }}" alt="{{ p.name }}">
             <div class="product-info">
               <div class="product-name">{{ p.name }}</div>
