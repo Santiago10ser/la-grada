@@ -103,6 +103,12 @@
     /* EMPTY */
     .empty { padding: 4rem; text-align: center; color: rgba(245,242,236,0.25); }
     .empty-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+
+    /* NOVEDADES BLOCKS */
+    .nov-block { background: var(--mid); border: 1px solid rgba(201,168,76,0.1); padding: 1.5rem; margin-bottom: 1.5rem; }
+    .nov-block-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.08em; color: var(--gold); margin-bottom: 1rem; }
+    .nov-block-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .nov-block-title-row .nov-block-title { margin-bottom: 0; }
   </style>
 </head>
 <body>
@@ -120,12 +126,16 @@
 
   <div class="admin-layout">
     <aside class="sidebar">
-      <div class="sidebar-item active" onclick="showSection('productos')">
+      <div class="sidebar-item active" onclick="showSection('productos')" id="navProductos">
         <span class="sidebar-icon">👕</span> Productos
+      </div>
+      <div class="sidebar-item" onclick="showSection('novedades')" id="navNovedades">
+        <span class="sidebar-icon">📰</span> Novedades
       </div>
     </aside>
 
     <main class="admin-main">
+      <div id="sectionProductos">
       <div class="page-title">PANEL <span>ADMIN</span></div>
       <div class="page-subtitle">Gestión de productos — La Grada</div>
 
@@ -160,9 +170,55 @@
             </tr>
           </thead>
           <tbody id="productTable">
-            <tr><td colspan="8" style="text-align:center; padding:2rem; color:rgba(245,242,236,0.3);">Cargando...</td></tr>
+            <tr><td colspan="9" style="text-align:center; padding:2rem; color:rgba(245,242,236,0.3);">Cargando...</td></tr>
           </tbody>
         </table>
+      </div>
+      </div>
+
+      <div id="sectionNovedades" style="display:none;">
+        <div class="page-title">NOVEDADES <span>ADMIN</span></div>
+        <div class="page-subtitle">Editar banners y cards de la página de novedades</div>
+
+        <div class="nov-block">
+          <div class="nov-block-title">📌 Banner Destacado (grande, arriba)</div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Badge</label><input class="form-input" id="dBadge"></div>
+            <div class="form-group"><label class="form-label">Categoría</label><input class="form-input" id="dCategoria"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Título</label><input class="form-input" id="dTitulo"></div>
+          <div class="form-group"><label class="form-label">Texto</label><input class="form-input" id="dTexto"></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Fecha / etiqueta</label><input class="form-input" id="dFecha"></div>
+            <div class="form-group"><label class="form-label">URL imagen (opcional)</label><input class="form-input" id="dImagen"></div>
+          </div>
+          <button class="btn-save" onclick="saveBanner('destacado')">Guardar destacado</button>
+        </div>
+
+        <div class="nov-block">
+          <div class="nov-block-title">🎁 Banner de Promo</div>
+          <div class="form-group"><label class="form-label">Etiqueta (ej: "Promo vigente")</label><input class="form-input" id="pCategoria"></div>
+          <div class="form-group"><label class="form-label">Título</label><input class="form-input" id="pTitulo"></div>
+          <div class="form-group"><label class="form-label">Texto</label><input class="form-input" id="pTexto"></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Texto del botón</label><input class="form-input" id="pBoton"></div>
+            <div class="form-group"><label class="form-label">Link del botón</label><input class="form-input" id="pLink"></div>
+          </div>
+          <button class="btn-save" onclick="saveBanner('promo')">Guardar promo</button>
+        </div>
+
+        <div class="nov-block">
+          <div class="nov-block-title-row">
+            <div class="nov-block-title">🗂️ Cards de novedades</div>
+            <button class="add-btn" onclick="openCardModal()">+ Agregar card</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Tipo</th><th>Título</th><th>Fecha</th><th>Acciones</th></tr></thead>
+              <tbody id="cardsTable"><tr><td colspan="4" style="text-align:center; padding:1.5rem; color:rgba(245,242,236,0.3);">Cargando...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </main>
   </div>
@@ -230,6 +286,43 @@
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
         <button class="btn-save" onclick="saveProduct()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD MODAL -->
+  <div class="modal-overlay" id="cardModalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="cardModalTitle">AGREGAR CARD</div>
+        <button class="modal-close" onclick="closeCardModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="cardEditId">
+        <div class="form-group">
+          <label class="form-label">Tipo *</label>
+          <select class="form-select" id="cTipo">
+            <option value="producto">Producto / Encargos</option>
+            <option value="noticia">Noticia / Info</option>
+            <option value="promo">Promoción</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Título *</label>
+          <input class="form-input" id="cTitulo" type="text">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Texto *</label>
+          <input class="form-input" id="cTexto" type="text">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fecha / etiqueta</label>
+          <input class="form-input" id="cFecha" type="text" placeholder="Ej: Disponible ahora">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeCardModal()">Cancelar</button>
+        <button class="btn-save" onclick="saveCard()">Guardar</button>
       </div>
     </div>
   </div>
@@ -389,6 +482,143 @@
     // ── LOGOUT ─────────────────────────────────────────
     function logout() {
       window.location.href = '/admin/logout';
+    }
+
+    // ── SECTION SWITCHING ──────────────────────────────
+    function showSection(section) {
+      document.getElementById('sectionProductos').style.display = section === 'productos' ? 'block' : 'none';
+      document.getElementById('sectionNovedades').style.display = section === 'novedades' ? 'block' : 'none';
+      document.getElementById('navProductos').classList.toggle('active', section === 'productos');
+      document.getElementById('navNovedades').classList.toggle('active', section === 'novedades');
+      if (section === 'novedades') loadNovedades();
+    }
+
+    // ── NOVEDADES: BANNERS ─────────────────────────────
+    async function loadNovedades() {
+      try {
+        const res = await fetch('/admin/api/novedades');
+        const data = await res.json();
+        const destacado = data.banners.find(b => b.tipo === 'destacado');
+        const promo = data.banners.find(b => b.tipo === 'promo');
+
+        if (destacado) {
+          document.getElementById('dBadge').value = destacado.badge || '';
+          document.getElementById('dCategoria').value = destacado.categoria || '';
+          document.getElementById('dTitulo').value = destacado.titulo || '';
+          document.getElementById('dTexto').value = destacado.texto || '';
+          document.getElementById('dFecha').value = destacado.fecha || '';
+          document.getElementById('dImagen').value = destacado.imagen_url || '';
+        }
+        if (promo) {
+          document.getElementById('pCategoria').value = promo.categoria || '';
+          document.getElementById('pTitulo').value = promo.titulo || '';
+          document.getElementById('pTexto').value = promo.texto || '';
+          document.getElementById('pBoton').value = promo.boton_texto || '';
+          document.getElementById('pLink').value = promo.link || '';
+        }
+
+        allCards = data.cards || [];
+        renderCardsTable();
+      } catch(e) {
+        showToast('Error al cargar novedades', true);
+      }
+    }
+
+    async function saveBanner(tipo) {
+      let data = { tipo };
+      if (tipo === 'destacado') {
+        data.badge = document.getElementById('dBadge').value.trim();
+        data.categoria = document.getElementById('dCategoria').value.trim();
+        data.titulo = document.getElementById('dTitulo').value.trim();
+        data.texto = document.getElementById('dTexto').value.trim();
+        data.fecha = document.getElementById('dFecha').value.trim();
+        data.imagen_url = document.getElementById('dImagen').value.trim();
+      } else {
+        data.categoria = document.getElementById('pCategoria').value.trim();
+        data.titulo = document.getElementById('pTitulo').value.trim();
+        data.texto = document.getElementById('pTexto').value.trim();
+        data.boton_texto = document.getElementById('pBoton').value.trim();
+        data.link = document.getElementById('pLink').value.trim();
+      }
+      try {
+        const res = await fetch('/admin/api/novedades/banner', {
+          method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)
+        });
+        if (res.ok) showToast('Banner guardado ✓');
+        else showToast('Error al guardar', true);
+      } catch(e) { showToast('Error de conexión', true); }
+    }
+
+    // ── NOVEDADES: CARDS ───────────────────────────────
+    let allCards = [];
+    const tipoLabels = { producto: 'Encargos', noticia: 'Info', promo: 'Promoción' };
+
+    function renderCardsTable() {
+      const tbody = document.getElementById('cardsTable');
+      if (!allCards.length) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:1.5rem; color:rgba(245,242,236,0.3);">Sin cards todavía.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = allCards.map(c => `
+        <tr>
+          <td><span class="tag-badge" style="background:rgba(201,168,76,0.15); color:var(--gold);">${tipoLabels[c.tipo] || c.tipo}</span></td>
+          <td><strong>${c.titulo}</strong></td>
+          <td style="font-size:0.75rem; color:rgba(245,242,236,0.4);">${c.fecha || '—'}</td>
+          <td>
+            <button class="action-btn edit-btn" onclick="editCard(${c.id})">Editar</button>
+            <button class="action-btn delete-btn" onclick="deleteCard(${c.id})">Borrar</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openCardModal(card = null) {
+      document.getElementById('cardEditId').value = card ? card.id : '';
+      document.getElementById('cardModalTitle').textContent = card ? 'EDITAR CARD' : 'AGREGAR CARD';
+      document.getElementById('cTipo').value = card?.tipo || 'producto';
+      document.getElementById('cTitulo').value = card?.titulo || '';
+      document.getElementById('cTexto').value = card?.texto || '';
+      document.getElementById('cFecha').value = card?.fecha || '';
+      document.getElementById('cardModalOverlay').classList.add('open');
+    }
+
+    function closeCardModal() {
+      document.getElementById('cardModalOverlay').classList.remove('open');
+    }
+
+    function editCard(id) {
+      const c = allCards.find(c => c.id === id);
+      if (c) openCardModal(c);
+    }
+
+    async function saveCard() {
+      const id = document.getElementById('cardEditId').value;
+      const data = {
+        tipo: document.getElementById('cTipo').value,
+        titulo: document.getElementById('cTitulo').value.trim(),
+        texto: document.getElementById('cTexto').value.trim(),
+        fecha: document.getElementById('cFecha').value.trim(),
+      };
+      if (!data.titulo || !data.texto) { showToast('Completá título y texto', true); return; }
+      try {
+        const url = id ? `/admin/api/novedades/cards/${id}` : '/admin/api/novedades/cards';
+        const method = id ? 'PUT' : 'POST';
+        const res = await fetch(url, { method, headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+        if (res.ok) {
+          closeCardModal();
+          await loadNovedades();
+          showToast(id ? 'Card actualizada ✓' : 'Card agregada ✓');
+        } else showToast('Error al guardar', true);
+      } catch(e) { showToast('Error de conexión', true); }
+    }
+
+    async function deleteCard(id) {
+      if (!confirm('¿Borrar esta card?')) return;
+      try {
+        const res = await fetch(`/admin/api/novedades/cards/${id}`, { method: 'DELETE' });
+        if (res.ok) { await loadNovedades(); showToast('Card eliminada'); }
+        else showToast('Error al eliminar', true);
+      } catch(e) { showToast('Error de conexión', true); }
     }
 
     // ── DRAG & DROP ────────────────────────────────────
