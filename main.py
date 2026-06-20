@@ -146,60 +146,59 @@ async def api_delete_producto(id: int, request: Request):
     supabase.table("productos").delete().eq("id", id).execute()
     return JSONResponse({"ok": True})
 
-# ── ADMIN API: NOVEDADES BANNERS ───────────────────────────
+# ── ADMIN API: NOVEDADES (unificado) ────────────────────────
 
-@app.get("/admin/api/banners")
-async def api_get_banners(request: Request):
+@app.get("/admin/api/novedades")
+async def api_get_novedades(request: Request):
     if not is_admin(request):
         return JSONResponse({"error": "No autorizado"}, status_code=401)
-    res = supabase.table("novedades_banners").select("*").execute()
-    return JSONResponse(res.data)
+    banners_res = supabase.table("novedades_banners").select("*").execute()
+    cards_res = supabase.table("novedades_cards").select("*").order("orden").execute()
+    return JSONResponse({"banners": banners_res.data, "cards": cards_res.data})
 
-@app.put("/admin/api/banners/{id}")
-async def api_update_banner(id: int, request: Request):
+@app.post("/admin/api/novedades/banner")
+async def api_update_novedades_banner(request: Request):
     if not is_admin(request):
         return JSONResponse({"error": "No autorizado"}, status_code=401)
     data = await request.json()
-    res = supabase.table("novedades_banners").update(data).eq("id", id).execute()
+    tipo = data.get("tipo")
+    existing = supabase.table("novedades_banners").select("id").eq("tipo", tipo).limit(1).execute()
+    if existing.data:
+        res = supabase.table("novedades_banners").update(data).eq("tipo", tipo).execute()
+    else:
+        res = supabase.table("novedades_banners").insert(data).execute()
     return JSONResponse(res.data)
 
-# ── ADMIN API: NOVEDADES CARDS ──────────────────────────────
-
-@app.get("/admin/api/cards")
-async def api_get_cards(request: Request):
-    if not is_admin(request):
-        return JSONResponse({"error": "No autorizado"}, status_code=401)
-    res = supabase.table("novedades_cards").select("*").order("orden").execute()
-    return JSONResponse(res.data)
-
-@app.post("/admin/api/cards")
-async def api_add_card(request: Request):
+@app.post("/admin/api/novedades/cards")
+async def api_add_novedades_card(request: Request):
     if not is_admin(request):
         return JSONResponse({"error": "No autorizado"}, status_code=401)
     data = await request.json()
     res = supabase.table("novedades_cards").insert(data).execute()
     return JSONResponse(res.data)
 
-@app.put("/admin/api/cards/{id}")
-async def api_update_card(id: int, request: Request):
+@app.put("/admin/api/novedades/cards/{id}")
+async def api_update_novedades_card(id: int, request: Request):
     if not is_admin(request):
         return JSONResponse({"error": "No autorizado"}, status_code=401)
     data = await request.json()
     res = supabase.table("novedades_cards").update(data).eq("id", id).execute()
     return JSONResponse(res.data)
 
-@app.delete("/admin/api/cards/{id}")
-async def api_delete_card(id: int, request: Request):
+@app.delete("/admin/api/novedades/cards/{id}")
+async def api_delete_novedades_card(id: int, request: Request):
     if not is_admin(request):
         return JSONResponse({"error": "No autorizado"}, status_code=401)
     supabase.table("novedades_cards").delete().eq("id", id).execute()
     return JSONResponse({"ok": True})
 
-@app.post("/admin/api/cards/reorder")
-async def api_reorder_cards(request: Request):
+@app.post("/admin/api/novedades/cards/reorder")
+async def api_reorder_novedades_cards(request: Request):
     if not is_admin(request):
         return JSONResponse({"error": "No autorizado"}, status_code=401)
     updates = await request.json()
     for item in updates:
         supabase.table("novedades_cards").update({"orden": item["orden"]}).eq("id", item["id"]).execute()
     return JSONResponse({"ok": True})
+
+# ── ADMIN API: NOVEDADES CARDS (legacy, sin usar) ───────────
