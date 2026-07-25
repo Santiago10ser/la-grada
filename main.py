@@ -20,7 +20,7 @@ ADMIN_USER = "admin"
 ADMIN_PASS = "LagradaPy_10"
 ADMIN_TOKEN = "lagrada_admin_secret_token"
 
-categorias = ["Todos", "Selecciones", "Paraguay"]
+categorias = ["Todos", "Selecciones", "Paraguay", "Clubes"]
 
 def is_admin(request: Request):
     return request.cookies.get("admin_token") == ADMIN_TOKEN
