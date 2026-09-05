@@ -2,51 +2,199 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Login – La Grada</title>
   <link rel="icon" type="image/jpeg" href="https://res.cloudinary.com/dfwgsepcm/image/upload/v1781915834/logo_ocwskx.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Novedades – La Grada</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --gold: #c9a84c; --gold-light: #e8c97a; --black: #000; --white: #f5f2ec; }
-    body { background: var(--black); color: var(--white); font-family: 'Barlow', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-    body::before { content: ''; position: fixed; inset: 0; background-image: url('https://res.cloudinary.com/dfwgsepcm/image/upload/v1781915834/hero_d8s5f3.jpg'); background-size: cover; background-position: center; z-index: 0; }
-    body::after { content: ''; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 0; }
+    :root { --gold: #c9a84c; --gold-light: #e8c97a; --black: #000; --black-soft: #0a0a0a; --black-mid: #111; --white: #f5f2ec; }
+    body { color: var(--white); font-family: 'Barlow', sans-serif; min-height: 100vh; position: relative; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; z-index: -2; background-image: url('https://res.cloudinary.com/dfwgsepcm/image/upload/v1781915834/novedades_zgm8pf.jpg'); background-size: cover; background-position: center; }
+    body::after  { content: ''; position: fixed; inset: 0; z-index: -1; background: rgba(0,0,0,0.6); }
 
-    .login-box { position: relative; z-index: 1; width: 100%; max-width: 360px; padding: 0 1rem; }
-    .login-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 0.15em; text-align: center; margin-bottom: 0.3rem; }
-    .login-logo span { color: var(--gold); }
-    .login-badge { text-align: center; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,242,236,0.35); margin-bottom: 2rem; }
-    .login-card { background: rgba(10,10,10,0.9); backdrop-filter: blur(10px); padding: 2rem; border: 1px solid rgba(201,168,76,0.15); }
-    .login-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.1em; margin-bottom: 1.5rem; color: var(--gold); }
-    .form-group { margin-bottom: 1rem; }
-    .form-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,242,236,0.4); display: block; margin-bottom: 0.4rem; }
-    .form-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.2); color: var(--white); font-family: 'Barlow', sans-serif; font-size: 0.9rem; padding: 0.7rem 0.9rem; outline: none; transition: border-color 0.2s; }
-    .form-input:focus { border-color: var(--gold); }
-    .login-btn { width: 100%; padding: 0.85rem; background: var(--gold); color: var(--black); font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600; border: none; cursor: pointer; margin-top: 0.5rem; transition: background 0.2s; }
-    .login-btn:hover { background: var(--gold-light); }
-    .error-msg { background: rgba(139,0,0,0.3); border: 1px solid rgba(139,0,0,0.5); color: #e07070; font-size: 0.75rem; padding: 0.6rem 0.8rem; margin-bottom: 1rem; display: {% if error %}block{% else %}none{% endif %}; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 3rem; border-bottom: 1px solid rgba(201,168,76,0.2); background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.15em; color: var(--white); text-decoration: none; }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,242,236,0.6); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.97); z-index: 199; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.1em; color: var(--white); text-decoration: none; }
+    .mobile-menu a:hover { color: var(--gold); }
+
+    .page-hero { padding: 4rem 3rem 2rem; }
+    .page-hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 8vw, 3.5rem); letter-spacing: 0.1em; }
+    .page-hero h1 span { color: var(--gold); }
+    .page-hero p { font-size: 0.75rem; color: rgba(245,242,236,0.4); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.4rem; }
+
+    .tabs { display: flex; border-bottom: 1px solid rgba(201,168,76,0.2); padding: 0 3rem; background: transparent; overflow-x: auto; }
+    .tab { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 1rem 1.5rem; color: rgba(245,242,236,0.4); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; text-decoration: none; white-space: nowrap; }
+    .tab:hover { color: var(--white); }
+    .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    .featured { margin: 2.5rem 3rem 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(201,168,76,0.08); }
+    .featured-img { background: rgba(0,0,0,0.3); aspect-ratio: 16/9; display: flex; align-items: flex-start; justify-content: flex-start; position: relative; overflow: hidden; min-height: 200px; }
+    .featured-img svg { width: 35%; height: 35%; opacity: 0.12; }
+    .featured-badge { position: absolute; top: 1rem; left: 1rem; background: var(--gold); color: var(--black); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; font-weight: 600; }
+    .featured-body { background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); padding: 2.5rem; display: flex; flex-direction: column; justify-content: center; }
+    .featured-cat { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    .featured-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.5rem, 4vw, 2.2rem); letter-spacing: 0.06em; line-height: 1.1; margin-bottom: 1rem; }
+    .featured-text { font-size: 0.85rem; color: rgba(245,242,236,0.5); line-height: 1.7; margin-bottom: 1.5rem; }
+    .featured-date { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,242,236,0.25); }
+
+    .promo-banner { margin: 2rem 3rem; padding: 2rem 2.5rem; border: 1px solid rgba(201,168,76,0.3); display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); }
+    .promo-tag { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+    .promo-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.5rem, 4vw, 2rem); letter-spacing: 0.08em; }
+    .promo-desc { font-size: 0.78rem; color: rgba(245,242,236,0.45); margin-top: 0.3rem; }
+    .promo-btn { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; background: var(--gold); color: var(--black); padding: 0.75rem 2rem; text-decoration: none; font-weight: 600; transition: background 0.2s; white-space: nowrap; }
+    .promo-btn:hover { background: var(--gold-light); }
+
+    .section-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,242,236,0.3); padding: 2rem 3rem 1rem; border-top: 1px solid rgba(201,168,76,0.1); margin-top: 2rem; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1px; background: rgba(201,168,76,0.08); margin: 0 3rem; }
+    .card { background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); padding: 1.5rem; cursor: pointer; transition: background 0.2s; }
+    .card:hover { background: rgba(0,0,0,0.65); }
+    .card-type { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.6rem; display: inline-block; padding: 3px 8px; }
+    .type-promo { background: rgba(139,0,0,0.3); color: #e07070; }
+    .type-producto { background: rgba(201,168,76,0.15); color: var(--gold); }
+    .type-noticia { background: rgba(255,255,255,0.06); color: rgba(245,242,236,0.6); }
+    .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.05em; line-height: 1.15; margin-bottom: 0.5rem; }
+    .card-text { font-size: 0.78rem; color: rgba(245,242,236,0.4); line-height: 1.6; margin-bottom: 1rem; }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; }
+    .card-date { font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(245,242,236,0.2); }
+    .card-arrow { color: var(--gold); opacity: 0; transition: opacity 0.2s; }
+    .card:hover .card-arrow { opacity: 1; }
+
+    footer { border-top: 1px solid rgba(201,168,76,0.15); padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.15em; color: rgba(245,242,236,0.2); }
+    .footer-text { font-size: 0.7rem; color: rgba(245,242,236,0.2); }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .page-hero { padding: 3rem 1.5rem 2rem; }
+      .tabs { padding: 0 1.5rem; }
+      .featured { grid-template-columns: 1fr; margin: 1.5rem 1.5rem 0; }
+      .featured-body { padding: 1.5rem; }
+      .promo-banner { margin: 1.5rem; padding: 1.5rem; flex-direction: column; align-items: flex-start; }
+      .section-label { padding: 1.5rem 1.5rem 0.75rem; }
+      .cards-grid { grid-template-columns: 1fr; margin: 0 1.5rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.2rem 1.5rem; }
+    }
   </style>
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1099650066347544');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1099650066347544&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
 </head>
 <body>
-  <div class="login-box">
-    <div class="login-logo">LA <span>GRADA</span></div>
-    <div class="login-badge">Panel de administración</div>
-    <div class="login-card">
-      <div class="login-title">INICIAR SESIÓN</div>
-      <div class="error-msg">{% if error %}{{ error }}{% endif %}</div>
-      <form method="POST" action="/admin/login">
-        <div class="form-group">
-          <label class="form-label">Usuario</label>
-          <input class="form-input" type="text" name="username" autocomplete="username" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Contraseña</label>
-          <input class="form-input" type="password" name="password" autocomplete="current-password" required>
-        </div>
-        <button class="login-btn" type="submit">Entrar</button>
-      </form>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/productos" onclick="closeMobile()">Productos</a>
+    <a href="/novedades" onclick="closeMobile()">Novedades</a>
+    <a href="/encargos" onclick="closeMobile()">Encargos</a>
+    <a href="/contacto" onclick="closeMobile()">Contacto</a>
+  </div>
+
+  <nav>
+    <a href="/" class="nav-logo"><img src="https://res.cloudinary.com/dfwgsepcm/image/upload/v1781915834/logo_ocwskx.jpg" alt="La Grada" style="height: 50px; object-fit: contain;"></a>
+    <div class="nav-links">
+      <a href="/productos">Productos</a>
+      <a href="/novedades" class="active">Novedades</a>
+      <a href="/encargos">Encargos</a>
+      <a href="/contacto">Contacto</a>
+    </div>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <h1>ÚLTIMAS <span>NOVEDADES</span></h1>
+    <p>Noticias, lanzamientos y promos de La Grada</p>
+  </div>
+
+
+
+  {% if destacado %}
+  <div class="featured">
+    <div class="featured-img">
+      <span class="featured-badge">{{ destacado.badge or 'Destacado' }}</span>
+      {% if destacado.imagen_url %}
+      <img src="{{ destacado.imagen_url }}" alt="Novedades" style="width:100%; height:100%; object-fit:cover; object-position: center top; display:block;">
+      {% endif %}
+    </div>
+    <div class="featured-body">
+      <div class="featured-cat">{{ destacado.categoria }}</div>
+      <div class="featured-title">{{ destacado.titulo }}</div>
+      <p class="featured-text">{{ destacado.texto }}</p>
+      <div class="featured-date">{{ destacado.fecha }}</div>
     </div>
   </div>
+  {% endif %}
+
+  {% if promo %}
+  <div class="promo-banner">
+    <div>
+      <div class="promo-tag">{{ promo.categoria }}</div>
+      <div class="promo-title">{{ promo.titulo }}</div>
+      <p class="promo-desc">{{ promo.texto }}</p>
+    </div>
+    <a href="{{ promo.link or '/productos' }}" class="promo-btn">{{ promo.boton_texto or 'Ver más →' }}</a>
+  </div>
+  {% endif %}
+
+  <div class="section-label">Más novedades</div>
+  <div class="cards-grid">
+    {% for c in cards %}
+    <div class="card">
+      <span class="card-type type-{{ c.tipo }}">{{ {'producto': 'Encargos', 'noticia': 'Info', 'promo': 'Promoción'}.get(c.tipo, c.tipo) }}</span>
+      <div class="card-title">{{ c.titulo }}</div>
+      <p class="card-text">{{ c.texto }}</p>
+      <div class="card-footer">
+        <span class="card-date">{{ c.fecha }}</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <footer>
+    <div class="footer-logo">La Grada</div>
+    <div class="footer-text">© 2025 La Grada – Todos los derechos reservados</div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('hamburger').classList.toggle('open');
+      document.getElementById('mobileMenu').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMobile() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  </script>
+  <script src="/static/js/social-dock.js"></script>
 </body>
 </html>
