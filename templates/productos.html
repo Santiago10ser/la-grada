@@ -314,7 +314,7 @@
 
       <div class="drawer-divider"></div>
 
-      <a href="/encargos" class="drawer-personalizar-btn">✏️ Personalizar camiseta</a>
+      <a id="drawerPersonalizarBtn" href="/encargos" class="drawer-personalizar-btn">✏️ Personalizar camiseta</a>
 
       <div class="drawer-divider"></div>
 
@@ -389,6 +389,7 @@
       } else { note.style.display = 'none'; }
 
       updateWaLink(name, '', version, price);
+      document.getElementById('drawerPersonalizarBtn').href = `/encargos?producto=${encodeURIComponent(name)}`;
       document.getElementById('drawer').classList.add('open');
       document.getElementById('drawerOverlay').classList.add('open');
       document.body.style.overflow = 'hidden';
