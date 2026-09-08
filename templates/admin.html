@@ -132,6 +132,9 @@
       <div class="sidebar-item" onclick="showSection('novedades')" id="navNovedades">
         <span class="sidebar-icon">📰</span> Novedades
       </div>
+      <div class="sidebar-item" onclick="showSection('promo')" id="navPromo">
+        <span class="sidebar-icon">🔥</span> Promo
+      </div>
     </aside>
 
     <main class="admin-main">
@@ -331,6 +334,65 @@
 
   <div class="toast" id="toast"></div>
 
+  <!-- PROMO SECTION -->
+  <div id="sectionPromo" style="display:none; padding:0 2rem 2rem;">
+    <div class="page-title" style="margin-bottom:0.3rem;">PROMO <span>BANNER</span></div>
+    <div class="page-subtitle" style="margin-bottom:2rem;">Franja de promoción en página de productos</div>
+
+    <div style="background:var(--mid); padding:2rem; border:1px solid rgba(201,168,76,0.1); margin-bottom:1.5rem;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:0.1em; color:var(--gold);">Estado</div>
+        <label style="display:flex; align-items:center; gap:0.75rem; cursor:pointer;">
+          <span style="font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,242,236,0.5);">Mostrar promo en la tienda</span>
+          <input type="checkbox" id="promoActivo" style="width:18px; height:18px; accent-color:var(--gold); cursor:pointer;">
+        </label>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="form-group" style="grid-column:1/-1;">
+          <label class="form-label">Título de la promo *</label>
+          <input class="form-input" id="pTitulo" type="text" placeholder="Ej: 2 X 1 EN CLUBES">
+        </div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <label class="form-label">Descripción</label>
+          <input class="form-input" id="pDesc" type="text" placeholder="Descripción de la promo...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Precio original (tachado)</label>
+          <input class="form-input" id="pPrecioOld" type="text" placeholder="Gs. 500.000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Precio promo</label>
+          <input class="form-input" id="pPrecioNew" type="text" placeholder="Gs. 390.000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fecha de fin (contador)</label>
+          <input class="form-input" id="pFechaFin" type="datetime-local">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Texto del botón</label>
+          <input class="form-input" id="pBoton" type="text" placeholder="Aprovechar la promo">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Link del botón</label>
+          <input class="form-input" id="pLink" type="text" placeholder="https://wa.me/...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">URL Imagen 1</label>
+          <input class="form-input" id="pImg1" type="text" placeholder="https://res.cloudinary.com/...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">URL Imagen 2</label>
+          <input class="form-input" id="pImg2" type="text" placeholder="https://res.cloudinary.com/...">
+        </div>
+      </div>
+
+      <div style="margin-top:1.5rem;">
+        <button class="btn-save" onclick="savePromo()">Guardar promo</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let allProducts = [];
     let currentFilter = 'Todos';
@@ -490,9 +552,54 @@
     function showSection(section) {
       document.getElementById('sectionProductos').style.display = section === 'productos' ? 'block' : 'none';
       document.getElementById('sectionNovedades').style.display = section === 'novedades' ? 'block' : 'none';
+      document.getElementById('sectionPromo').style.display     = section === 'promo'     ? 'block' : 'none';
       document.getElementById('navProductos').classList.toggle('active', section === 'productos');
       document.getElementById('navNovedades').classList.toggle('active', section === 'novedades');
+      document.getElementById('navPromo').classList.toggle('active', section === 'promo');
       if (section === 'novedades') loadNovedades();
+      if (section === 'promo') loadPromo();
+    }
+
+    // ── PROMO ───────────────────────────────────────────
+    async function loadPromo() {
+      try {
+        const res = await fetch('/admin/api/promo');
+        const p = await res.json();
+        if (!p || !p.id) return;
+        document.getElementById('promoActivo').checked = p.activo || false;
+        document.getElementById('pTitulo').value    = p.titulo || '';
+        document.getElementById('pDesc').value      = p.descripcion || '';
+        document.getElementById('pPrecioOld').value = p.precio_original || '';
+        document.getElementById('pPrecioNew').value = p.precio_promo || '';
+        document.getElementById('pBoton').value     = p.boton_texto || '';
+        document.getElementById('pLink').value      = p.link || '';
+        document.getElementById('pImg1').value      = p.img1 || '';
+        document.getElementById('pImg2').value      = p.img2 || '';
+        if (p.fecha_fin) {
+          const d = new Date(p.fecha_fin);
+          document.getElementById('pFechaFin').value = d.toISOString().slice(0,16);
+        }
+      } catch(e) { showToast('Error al cargar promo', true); }
+    }
+
+    async function savePromo() {
+      const data = {
+        activo:          document.getElementById('promoActivo').checked,
+        titulo:          document.getElementById('pTitulo').value.trim(),
+        descripcion:     document.getElementById('pDesc').value.trim(),
+        precio_original: document.getElementById('pPrecioOld').value.trim(),
+        precio_promo:    document.getElementById('pPrecioNew').value.trim(),
+        boton_texto:     document.getElementById('pBoton').value.trim(),
+        link:            document.getElementById('pLink').value.trim(),
+        img1:            document.getElementById('pImg1').value.trim(),
+        img2:            document.getElementById('pImg2').value.trim(),
+        fecha_fin:       document.getElementById('pFechaFin').value || null,
+      };
+      try {
+        const res = await fetch('/admin/api/promo', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
+        if (res.ok) showToast('Promo guardada ✓');
+        else showToast('Error al guardar', true);
+      } catch(e) { showToast('Error de conexión', true); }
     }
 
     // ── NOVEDADES: BANNERS ─────────────────────────────

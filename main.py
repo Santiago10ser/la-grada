@@ -148,6 +148,33 @@ async def api_delete_producto(id: int, request: Request):
 
 # ── ADMIN API: NOVEDADES (unificado) ────────────────────────
 
+@app.get("/api/promo")
+async def api_promo_public():
+    try:
+        res = supabase.table("promo_banner").select("*").eq("activo", True).limit(1).execute()
+        return JSONResponse(res.data[0] if res.data else {})
+    except:
+        return JSONResponse({})
+
+@app.get("/admin/api/promo")
+async def api_get_promo(request: Request):
+    if not is_admin(request):
+        return JSONResponse({"error": "No autorizado"}, status_code=401)
+    res = supabase.table("promo_banner").select("*").limit(1).execute()
+    return JSONResponse(res.data[0] if res.data else {})
+
+@app.put("/admin/api/promo")
+async def api_update_promo(request: Request):
+    if not is_admin(request):
+        return JSONResponse({"error": "No autorizado"}, status_code=401)
+    data = await request.json()
+    existing = supabase.table("promo_banner").select("id").limit(1).execute()
+    if existing.data:
+        res = supabase.table("promo_banner").update(data).eq("id", existing.data[0]["id"]).execute()
+    else:
+        res = supabase.table("promo_banner").insert(data).execute()
+    return JSONResponse(res.data)
+
 @app.get("/admin/api/novedades")
 async def api_get_novedades(request: Request):
     if not is_admin(request):
@@ -202,3 +229,4 @@ async def api_reorder_novedades_cards(request: Request):
     return JSONResponse({"ok": True})
 
 # ── ADMIN API: NOVEDADES CARDS (legacy, sin usar) ───────────
+

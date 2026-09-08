@@ -53,6 +53,36 @@
     .page-header h1 span { color: var(--gold); }
     .page-header p { font-size: 0.75rem; color: rgba(245,242,236,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.4rem; }
 
+    /* PROMO BANNER */
+    .promo-strip { display: none; margin: 0 3rem 2rem; background: linear-gradient(100deg, #141210 0%, #0d0c0b 55%, #141210 100%); border: 1px solid var(--gold); padding: 2.5rem 3rem; position: relative; overflow: hidden; }
+    .promo-strip.visible { display: grid; grid-template-columns: 1fr 320px; gap: 3rem; align-items: center; }
+    .promo-strip::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 30% 50%, rgba(201,168,76,0.05) 0%, transparent 70%); pointer-events: none; }
+    .promo-badge { display: inline-flex; align-items: center; background: var(--gold); color: var(--black); font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 5px 12px; font-weight: 700; margin-bottom: 1rem; }
+    .promo-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 0.95; color: var(--white); letter-spacing: 0.02em; margin-bottom: 1rem; }
+    .promo-desc { font-size: 0.85rem; color: rgba(245,242,236,0.5); line-height: 1.6; max-width: 500px; margin-bottom: 1.2rem; }
+    .promo-prices { display: flex; align-items: flex-end; gap: 1.2rem; margin-bottom: 1.5rem; }
+    .promo-price-old { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: rgba(245,242,236,0.3); text-decoration: line-through; }
+    .promo-price-new { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; color: var(--gold-light); line-height: 1; }
+    .promo-countdown { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+    .promo-countdown-label { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,242,236,0.3); }
+    .promo-countdown-boxes { display: flex; gap: 8px; }
+    .countdown-box { border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; text-align: center; min-width: 56px; }
+    .countdown-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--white); line-height: 1; }
+    .countdown-unit { font-size: 0.55rem; letter-spacing: 0.14em; color: rgba(245,242,236,0.3); text-transform: uppercase; margin-top: 2px; }
+    .promo-btn { display: inline-block; font-family: 'Bebas Neue', sans-serif; text-transform: uppercase; letter-spacing: 0.14em; font-size: 1rem; background: var(--gold); color: var(--black); padding: 14px 32px; text-decoration: none; transition: background 0.2s; }
+    .promo-btn:hover { background: var(--gold-light); }
+    .promo-imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; height: 240px; }
+    .promo-img { overflow: hidden; border: 1px solid rgba(201,168,76,0.15); }
+    .promo-img:last-child { margin-top: 30px; }
+    .promo-img img { width: 100%; height: 100%; object-fit: cover; }
+    .promo-img-placeholder { width: 100%; height: 100%; background: rgba(201,168,76,0.05); display: flex; align-items: center; justify-content: center; color: rgba(245,242,236,0.15); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    @media (max-width: 768px) {
+      .promo-strip.visible { grid-template-columns: 1fr; }
+      .promo-imgs { display: none; }
+      .promo-strip { padding: 1.5rem; margin: 0 1.5rem 1.5rem; }
+    }
+
     /* FILTERS */
     .filter-bar { display: flex; gap: 0.5rem; padding: 0 3rem 2rem; flex-wrap: wrap; }
     .filter-btn { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.5rem 1.2rem; border: 1px solid rgba(201,168,76,0.35); background: rgba(0,0,0,0.4); color: rgba(245,242,236,0.6); cursor: pointer; text-decoration: none; transition: all 0.2s; backdrop-filter: blur(4px); }
@@ -253,6 +283,33 @@
     {% for cat in categorias %}
     <a href="/productos?categoria={{ cat }}" class="filter-btn {% if cat == categoria_actual %}active{% endif %}">{{ cat }}</a>
     {% endfor %}
+  </div>
+
+  <!-- PROMO BANNER -->
+  <div class="promo-strip" id="promoBanner">
+    <div>
+      <div class="promo-badge" id="promoBadge">Promo de temporada</div>
+      <div class="promo-title" id="promoTitulo"></div>
+      <div class="promo-desc" id="promoDesc"></div>
+      <div class="promo-prices">
+        <div class="promo-price-old" id="promoPrecioOld"></div>
+        <div class="promo-price-new" id="promoPrecioNew"></div>
+      </div>
+      <div class="promo-countdown" id="promoCountdown">
+        <span class="promo-countdown-label">Termina en</span>
+        <div class="promo-countdown-boxes">
+          <div class="countdown-box"><div class="countdown-num" id="cdDays">00</div><div class="countdown-unit">Días</div></div>
+          <div class="countdown-box"><div class="countdown-num" id="cdHours">00</div><div class="countdown-unit">Hs</div></div>
+          <div class="countdown-box"><div class="countdown-num" id="cdMins">00</div><div class="countdown-unit">Min</div></div>
+          <div class="countdown-box"><div class="countdown-num" id="cdSecs">00</div><div class="countdown-unit">Seg</div></div>
+        </div>
+      </div>
+      <a class="promo-btn" id="promoBtn" href="#">Aprovechar la promo</a>
+    </div>
+    <div class="promo-imgs">
+      <div class="promo-img" id="promoImg1Container"><div class="promo-img-placeholder">Foto 1</div></div>
+      <div class="promo-img" id="promoImg2Container"><div class="promo-img-placeholder">Foto 2</div></div>
+    </div>
   </div>
 
   {% if products %}
@@ -478,6 +535,58 @@
 
       goTo(0);
     }
+
+    // PROMO BANNER
+    async function loadPromoBanner() {
+      try {
+        const res = await fetch('/api/promo');
+        const promo = await res.json();
+        if (!promo || !promo.activo) return;
+
+        const banner = document.getElementById('promoBanner');
+        document.getElementById('promoTitulo').textContent = promo.titulo || '';
+        document.getElementById('promoDesc').textContent = promo.descripcion || '';
+        document.getElementById('promoPrecioOld').textContent = promo.precio_original || '';
+        document.getElementById('promoPrecioNew').textContent = promo.precio_promo || '';
+        document.getElementById('promoBtn').textContent = promo.boton_texto || 'Aprovechar la promo';
+        document.getElementById('promoBtn').href = promo.link || '#';
+
+        if (promo.img1) {
+          document.getElementById('promoImg1Container').innerHTML = `<img src="${promo.img1}" alt="Promo 1">`;
+        }
+        if (promo.img2) {
+          document.getElementById('promoImg2Container').innerHTML = `<img src="${promo.img2}" alt="Promo 2">`;
+        }
+
+        // Countdown
+        if (promo.fecha_fin) {
+          const endDate = new Date(promo.fecha_fin);
+          function updateCountdown() {
+            const now = new Date();
+            const diff = endDate - now;
+            if (diff <= 0) {
+              document.getElementById('promoCountdown').style.display = 'none';
+              return;
+            }
+            const days  = Math.floor(diff / 86400000);
+            const hours = Math.floor((diff % 86400000) / 3600000);
+            const mins  = Math.floor((diff % 3600000) / 60000);
+            const secs  = Math.floor((diff % 60000) / 1000);
+            document.getElementById('cdDays').textContent  = String(days).padStart(2, '0');
+            document.getElementById('cdHours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('cdMins').textContent  = String(mins).padStart(2, '0');
+            document.getElementById('cdSecs').textContent  = String(secs).padStart(2, '0');
+          }
+          updateCountdown();
+          setInterval(updateCountdown, 1000);
+        }
+
+        banner.classList.add('visible');
+      } catch(e) {
+        console.log('No promo activa');
+      }
+    }
+    loadPromoBanner();
   </script>
   <script src="/static/js/social-dock.js"></script>
 </body>
