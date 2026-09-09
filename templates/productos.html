@@ -84,14 +84,14 @@
     }
 
     /* FILTERS */
-    .filter-bar { display: flex; gap: 0.5rem; padding: 0 3rem 2rem; flex-wrap: wrap; }
+    .filter-bar { display: flex; gap: 0.5rem; padding: 0 3rem 2rem; flex-wrap: wrap; order: 2; }
     .filter-btn { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.5rem 1.2rem; border: 1px solid rgba(201,168,76,0.35); background: rgba(0,0,0,0.4); color: rgba(245,242,236,0.6); cursor: pointer; text-decoration: none; transition: all 0.2s; backdrop-filter: blur(4px); }
     .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
     .filter-btn.active { background: var(--gold); color: var(--black); border-color: var(--gold); font-weight: 600; }
 
     /* CAROUSEL */
-    .carousel-section { padding: 0 0 4rem; }
-    .carousel-header { display: flex; justify-content: space-between; align-items: center; padding: 0 3rem 1rem; }
+    .carousel-section { padding: 0 0 4rem; display: flex; flex-direction: column; }
+    .carousel-header { display: flex; justify-content: space-between; align-items: center; padding: 0 3rem 1rem; order: 1; }
     .carousel-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; color: rgba(245,242,236,0.5); }
     .carousel-title span { color: var(--gold); }
     .carousel-counter { font-size: 0.7rem; letter-spacing: 0.1em; color: rgba(245,242,236,0.4); text-transform: uppercase; }
@@ -279,12 +279,6 @@
     <p>{{ total }} artículo{% if total != 1 %}s{% endif %} disponible{% if total != 1 %}s{% endif %}</p>
   </div>
 
-  <div class="filter-bar">
-    {% for cat in categorias %}
-    <a href="/productos?categoria={{ cat }}" class="filter-btn {% if cat == categoria_actual %}active{% endif %}">{{ cat }}</a>
-    {% endfor %}
-  </div>
-
   <!-- PROMO BANNER -->
   <div class="promo-strip" id="promoBanner">
     <div>
@@ -354,6 +348,12 @@
       <button class="ctrl-btn" id="btnPrev" onclick="move(-1)">&#8592;</button>
       <div class="dots" id="dots"></div>
       <button class="ctrl-btn" id="btnNext" onclick="move(1)">&#8594;</button>
+    </div>
+
+    <div class="filter-bar">
+      {% for cat in categorias %}
+      <a href="/productos?categoria={{ cat }}" class="filter-btn {% if cat == categoria_actual %}active{% endif %}">{{ cat }}</a>
+      {% endfor %}
     </div>
   </div>
   {% else %}
