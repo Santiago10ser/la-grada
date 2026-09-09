@@ -224,6 +224,63 @@
           </div>
         </div>
       </div>
+
+      <!-- PROMO SECTION -->
+      <div id="sectionPromo" style="display:none;">
+        <div class="page-title" style="margin-bottom:0.3rem;">PROMO <span>BANNER</span></div>
+        <div class="page-subtitle" style="margin-bottom:2rem;">Franja de promoción en página de productos</div>
+        <div style="background:var(--mid); padding:2rem; border:1px solid rgba(201,168,76,0.1);">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
+            <div style="font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:0.1em; color:var(--gold);">Estado</div>
+            <label style="display:flex; align-items:center; gap:0.75rem; cursor:pointer;">
+              <span style="font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,242,236,0.5);">Mostrar promo en la tienda</span>
+              <input type="checkbox" id="promoActivo" style="width:18px; height:18px; accent-color:var(--gold); cursor:pointer;">
+            </label>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div class="form-group" style="grid-column:1/-1;">
+              <label class="form-label">Título *</label>
+              <input class="form-input" id="pTitulo" type="text" placeholder="Ej: 2 X 1 EN CLUBES">
+            </div>
+            <div class="form-group" style="grid-column:1/-1;">
+              <label class="form-label">Descripción</label>
+              <input class="form-input" id="pDesc" type="text" placeholder="Descripción de la promo...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Precio original (tachado)</label>
+              <input class="form-input" id="pPrecioOld" type="text" placeholder="Gs. 500.000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Precio promo</label>
+              <input class="form-input" id="pPrecioNew" type="text" placeholder="Gs. 390.000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Fecha de fin (contador)</label>
+              <input class="form-input" id="pFechaFin" type="datetime-local">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Texto del botón</label>
+              <input class="form-input" id="pBoton" type="text" placeholder="Aprovechar la promo">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Link del botón</label>
+              <input class="form-input" id="pLink" type="text" placeholder="https://wa.me/...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">URL Imagen 1</label>
+              <input class="form-input" id="pImg1" type="text" placeholder="https://res.cloudinary.com/...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">URL Imagen 2</label>
+              <input class="form-input" id="pImg2" type="text" placeholder="https://res.cloudinary.com/...">
+            </div>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <button class="btn-save" onclick="savePromo()">Guardar promo</button>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 
@@ -333,65 +390,6 @@
   </div>
 
   <div class="toast" id="toast"></div>
-
-  <!-- PROMO SECTION -->
-  <div id="sectionPromo" style="display:none; padding:0 2rem 2rem;">
-    <div class="page-title" style="margin-bottom:0.3rem;">PROMO <span>BANNER</span></div>
-    <div class="page-subtitle" style="margin-bottom:2rem;">Franja de promoción en página de productos</div>
-
-    <div style="background:var(--mid); padding:2rem; border:1px solid rgba(201,168,76,0.1); margin-bottom:1.5rem;">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
-        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:0.1em; color:var(--gold);">Estado</div>
-        <label style="display:flex; align-items:center; gap:0.75rem; cursor:pointer;">
-          <span style="font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,242,236,0.5);">Mostrar promo en la tienda</span>
-          <input type="checkbox" id="promoActivo" style="width:18px; height:18px; accent-color:var(--gold); cursor:pointer;">
-        </label>
-      </div>
-
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-        <div class="form-group" style="grid-column:1/-1;">
-          <label class="form-label">Título de la promo *</label>
-          <input class="form-input" id="pTitulo" type="text" placeholder="Ej: 2 X 1 EN CLUBES">
-        </div>
-        <div class="form-group" style="grid-column:1/-1;">
-          <label class="form-label">Descripción</label>
-          <input class="form-input" id="pDesc" type="text" placeholder="Descripción de la promo...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Precio original (tachado)</label>
-          <input class="form-input" id="pPrecioOld" type="text" placeholder="Gs. 500.000">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Precio promo</label>
-          <input class="form-input" id="pPrecioNew" type="text" placeholder="Gs. 390.000">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Fecha de fin (contador)</label>
-          <input class="form-input" id="pFechaFin" type="datetime-local">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Texto del botón</label>
-          <input class="form-input" id="pBoton" type="text" placeholder="Aprovechar la promo">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Link del botón</label>
-          <input class="form-input" id="pLink" type="text" placeholder="https://wa.me/...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">URL Imagen 1</label>
-          <input class="form-input" id="pImg1" type="text" placeholder="https://res.cloudinary.com/...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">URL Imagen 2</label>
-          <input class="form-input" id="pImg2" type="text" placeholder="https://res.cloudinary.com/...">
-        </div>
-      </div>
-
-      <div style="margin-top:1.5rem;">
-        <button class="btn-save" onclick="savePromo()">Guardar promo</button>
-      </div>
-    </div>
-  </div>
 
   <script>
     let allProducts = [];
