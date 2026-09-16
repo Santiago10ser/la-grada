@@ -189,7 +189,8 @@
     .talle-btn:hover { border-color: var(--gold); color: var(--gold); }
     .talle-btn.selected { background: var(--gold); color: var(--black); border-color: var(--gold); font-weight: 600; }
 
-    .drawer-note { font-size: 0.72rem; color: rgba(245,242,236,0.35); line-height: 1.6; padding: 0.8rem; border: 1px solid rgba(201,168,76,0.1); margin-bottom: 1.5rem; background: rgba(201,168,76,0.04); }
+    .talle-btn.agotado { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; border-color: rgba(255,255,255,0.1); color: rgba(245,242,236,0.3); }
+    .talle-btn.agotado:hover { border-color: rgba(255,255,255,0.1); color: rgba(245,242,236,0.3); background: transparent; } color: rgba(245,242,236,0.35); line-height: 1.6; padding: 0.8rem; border: 1px solid rgba(201,168,76,0.1); margin-bottom: 1.5rem; background: rgba(201,168,76,0.04); }
     .drawer-note strong { color: var(--gold); }
 
     .drawer-optional { margin-bottom: 1.2rem; }
@@ -307,6 +308,13 @@
   </div>
 
   {% if products %}
+
+  <div class="filter-bar">
+    {% for cat in categorias %}
+    <a href="/productos?categoria={{ cat }}" class="filter-btn {% if cat == categoria_actual %}active{% endif %}">{{ cat }}</a>
+    {% endfor %}
+  </div>
+
   <div class="carousel-section">
     <div class="carousel-header">
       <div class="carousel-title">{{ categoria_actual if categoria_actual != 'Todos' else 'Todos los' }} <span>productos</span></div>
@@ -322,6 +330,7 @@
           data-price="{{ p.price }}"
           data-version="{{ p.version }}"
           data-tallas="{{ p.tallas }}"
+          data-talles-agotados="{{ p.talles_agotados or '' }}"
           data-tag="{{ p.tag or '' }}"
           data-img="{{ p.img }}"
           onclick="openDrawer(this)">
@@ -348,12 +357,6 @@
       <button class="ctrl-btn" id="btnPrev" onclick="move(-1)">&#8592;</button>
       <div class="dots" id="dots"></div>
       <button class="ctrl-btn" id="btnNext" onclick="move(1)">&#8594;</button>
-    </div>
-
-    <div class="filter-bar">
-      {% for cat in categorias %}
-      <a href="/productos?categoria={{ cat }}" class="filter-btn {% if cat == categoria_actual %}active{% endif %}">{{ cat }}</a>
-      {% endfor %}
     </div>
   </div>
   {% else %}
@@ -429,6 +432,7 @@
       const price   = parseInt(card.dataset.price);
       const version = card.dataset.version;
       const tallas  = card.dataset.tallas.split(',').map(t => t.trim());
+      const agotados = (card.dataset.tallesAgotados || '').split(',').map(t => t.trim()).filter(Boolean);
       const tag     = card.dataset.tag;
       const img     = card.dataset.img;
 
@@ -450,12 +454,18 @@
         const btn = document.createElement('button');
         btn.className = 'talle-btn';
         btn.textContent = t;
-        btn.onclick = (e) => {
-          e.stopPropagation();
-          grid.querySelectorAll('.talle-btn').forEach(b => b.classList.remove('selected'));
-          btn.classList.add('selected');
-          updateWaLink(name, t, version, price);
-        };
+        const isAgotado = agotados.includes(t);
+        if (isAgotado) {
+          btn.classList.add('agotado');
+          btn.title = 'Agotado';
+        } else {
+          btn.onclick = (e) => {
+            e.stopPropagation();
+            grid.querySelectorAll('.talle-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            updateWaLink(name, t, version, price);
+          };
+        }
         grid.appendChild(btn);
       });
 

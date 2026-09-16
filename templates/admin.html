@@ -338,6 +338,10 @@
             <label class="form-label">Color (hex)</label>
             <input class="form-input" id="fColor" type="text" placeholder="#002395">
           </div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label">Talles agotados (separados por coma)</label>
+            <input class="form-input" id="fTallasAgotadas" type="text" placeholder="Ej: M, XL">
+          </div>
         </div>
         <div class="form-group">
           <label class="form-label">URL de la imagen *</label>
@@ -458,6 +462,7 @@
       document.getElementById('fTag').value = product?.tag || '';
       document.getElementById('fTallas').value = product?.tallas || 'M, L, XL';
       document.getElementById('fColor').value = product?.color || '';
+      document.getElementById('fTallasAgotadas').value = product?.talles_agotados || '';
       document.getElementById('fImg').value = product?.img || '';
       const preview = document.getElementById('imgPreview');
       if (product?.img) { preview.src = product.img; preview.classList.add('visible'); }
@@ -492,6 +497,7 @@
         tag: document.getElementById('fTag').value || null,
         tallas: document.getElementById('fTallas').value.trim(),
         color: document.getElementById('fColor').value.trim(),
+        talles_agotados: document.getElementById('fTallasAgotadas').value.trim(),
         img: document.getElementById('fImg').value.trim(),
       };
 
