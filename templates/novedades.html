@@ -152,7 +152,7 @@
   </div>
   {% endif %}
 
-  {% if promo %}
+  {% if promo and promo.activo != false %}
   <div class="promo-banner">
     <div>
       <div class="promo-tag">{{ promo.categoria }}</div>

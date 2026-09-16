@@ -201,6 +201,10 @@
 
         <div class="nov-block">
           <div class="nov-block-title">🎁 Banner de Promo</div>
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+            <span style="font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,242,236,0.4);">Mostrar banner en novedades</span>
+            <input type="checkbox" id="promoNovedadesActivo" style="width:18px; height:18px; accent-color:var(--gold); cursor:pointer;">
+          </div>
           <div class="form-group"><label class="form-label">Etiqueta (ej: "Promo vigente")</label><input class="form-input" id="pCategoria"></div>
           <div class="form-group"><label class="form-label">Título</label><input class="form-input" id="pTitulo"></div>
           <div class="form-group"><label class="form-label">Texto</label><input class="form-input" id="pTexto"></div>
@@ -623,6 +627,7 @@
           document.getElementById('dImagen').value = destacado.imagen_url || '';
         }
         if (promo) {
+          document.getElementById('promoNovedadesActivo').checked = promo.activo !== false;
           document.getElementById('pCategoria').value = promo.categoria || '';
           document.getElementById('pTitulo').value = promo.titulo || '';
           document.getElementById('pTexto').value = promo.texto || '';
@@ -647,6 +652,7 @@
         data.fecha = document.getElementById('dFecha').value.trim();
         data.imagen_url = document.getElementById('dImagen').value.trim();
       } else {
+        data.activo = document.getElementById('promoNovedadesActivo').checked;
         data.categoria = document.getElementById('pCategoria').value.trim();
         data.titulo = document.getElementById('pTitulo').value.trim();
         data.texto = document.getElementById('pTexto').value.trim();
