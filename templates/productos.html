@@ -203,8 +203,7 @@
     .drawer-input:focus { border-color: var(--gold); }
     .drawer-input.visible { display: block; }
 
-    .drawer-personalizar-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; padding: 0.85rem; border: 1px solid rgba(201,168,76,0.4); background: transparent; color: var(--gold); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600; text-decoration: none; transition: all 0.2s; margin-bottom: 0; }
-    .drawer-personalizar-btn:hover { background: rgba(201,168,76,0.08); border-color: var(--gold); }
+
 
     .drawer-wa-btn {
       display: flex; align-items: center; justify-content: center; gap: 0.6rem;
@@ -217,6 +216,13 @@
     .drawer-wa-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
     .drawer-wa2 { display: flex; align-items: center; justify-content: center; gap: 0.6rem; width: 100%; padding: 0.8rem; background: transparent; border: 1px solid rgba(37,211,102,0.4); color: #25D366; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; text-decoration: none; transition: all 0.2s; }
     .drawer-wa2:hover { background: rgba(37,211,102,0.08); }
+
+    /* ENCARGOS CTA */
+    .encargos-cta { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; margin: 2rem 3rem 0; padding: 1.8rem 2.5rem; border: 1px solid rgba(201,168,76,0.2); background: rgba(0,0,0,0.4); backdrop-filter: blur(6px); flex-wrap: wrap; }
+    .encargos-cta-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.06em; color: var(--white); }
+    .encargos-cta-desc { font-size: 0.78rem; color: rgba(245,242,236,0.4); margin-top: 0.2rem; }
+    .encargos-cta-btn { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600; background: var(--gold); color: var(--black); padding: 0.85rem 2rem; text-decoration: none; transition: background 0.2s; white-space: nowrap; }
+    .encargos-cta-btn:hover { background: var(--gold-light); }
 
     /* RESPONSIVE */
     @media (max-width: 768px) {
@@ -359,6 +365,15 @@
       <button class="ctrl-btn" id="btnNext" onclick="move(1)">&#8594;</button>
     </div>
   </div>
+
+  <div class="encargos-cta">
+    <div class="encargos-cta-text">
+      <div class="encargos-cta-title">¿No encontrás lo que buscás?</div>
+      <div class="encargos-cta-desc">Encargamos cualquier camiseta a medida. Entrega en 20 a 30 días.</div>
+    </div>
+    <a href="/encargos" class="encargos-cta-btn">Hacer un encargo →</a>
+  </div>
+
   {% else %}
   <div style="padding: 5rem 3rem; text-align: center; color: rgba(245,242,236,0.3);">
     <div style="font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.1em;">Sin productos</div>
@@ -388,10 +403,6 @@
       <div class="talle-grid" id="talleGrid"></div>
 
       <div class="drawer-note" id="drawerNote"></div>
-
-      <div class="drawer-divider"></div>
-
-      <a id="drawerPersonalizarBtn" href="/encargos" class="drawer-personalizar-btn">✏️ Personalizar camiseta</a>
 
       <div class="drawer-divider"></div>
 
@@ -476,7 +487,6 @@
       } else { note.style.display = 'none'; }
 
       updateWaLink(name, '', version, price);
-      document.getElementById('drawerPersonalizarBtn').href = `/encargos?producto=${encodeURIComponent(name)}`;
       document.getElementById('drawer').classList.add('open');
       document.getElementById('drawerOverlay').classList.add('open');
       document.body.style.overflow = 'hidden';
