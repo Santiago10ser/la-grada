@@ -84,14 +84,14 @@
     }
 
     /* FILTERS */
-    .filter-bar { display: flex; gap: 0.5rem; padding: 0 3rem 2rem; flex-wrap: wrap; order: 2; }
+    .filter-bar { display: flex; gap: 0.5rem; padding: 0 3rem 1.5rem; flex-wrap: wrap; }
     .filter-btn { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.5rem 1.2rem; border: 1px solid rgba(201,168,76,0.35); background: rgba(0,0,0,0.4); color: rgba(245,242,236,0.6); cursor: pointer; text-decoration: none; transition: all 0.2s; backdrop-filter: blur(4px); }
     .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
     .filter-btn.active { background: var(--gold); color: var(--black); border-color: var(--gold); font-weight: 600; }
 
     /* CAROUSEL */
     .carousel-section { padding: 0 0 4rem; display: flex; flex-direction: column; }
-    .carousel-header { display: flex; justify-content: space-between; align-items: center; padding: 0 3rem 1rem; order: 1; }
+    .carousel-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem 1rem; }
     .carousel-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; color: rgba(245,242,236,0.5); }
     .carousel-title span { color: var(--gold); }
     .carousel-counter { font-size: 0.7rem; letter-spacing: 0.1em; color: rgba(245,242,236,0.4); text-transform: uppercase; }
@@ -315,6 +315,11 @@
 
   {% if products %}
 
+  <div class="carousel-header">
+    <div class="carousel-title">{{ categoria_actual if categoria_actual != 'Todos' else 'Todos los' }} <span>productos</span></div>
+    <div class="carousel-counter" id="counter">1 / {{ total }}</div>
+  </div>
+
   <div class="filter-bar">
     {% for cat in categorias %}
     <a href="/productos?categoria={{ cat }}" class="filter-btn {% if cat == categoria_actual %}active{% endif %}">{{ cat }}</a>
@@ -322,11 +327,6 @@
   </div>
 
   <div class="carousel-section">
-    <div class="carousel-header">
-      <div class="carousel-title">{{ categoria_actual if categoria_actual != 'Todos' else 'Todos los' }} <span>productos</span></div>
-      <div class="carousel-counter" id="counter">1 / {{ total }}</div>
-    </div>
-
     <div class="carousel-viewport">
       <div class="carousel-track" id="track">
         {% for p in products %}
@@ -408,10 +408,7 @@
 
       <a class="drawer-wa-btn" id="drawerWa1" href="#" target="_blank">
         <svg viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10" fill="#25D366"/><path d="M8.5 8.5c0 0-1 2 .5 3.5S12.5 14.5 12.5 14.5l1-1c.5-.5 1 0 1.5.5L16 15c.5.5 0 1.5-.5 2s-3 .5-5.5-2S6.5 9 7 8.5 8.5 8.5 8.5 8.5z" fill="white"/></svg>
-        Consultar por WhatsApp 1
-      </a>
-      <a class="drawer-wa2" id="drawerWa2" href="#" target="_blank">
-        Consultar por WhatsApp 2 · +595 971 544 874
+        Consultar por WhatsApp
       </a>
     </div>
   </div>
@@ -495,8 +492,7 @@
     function updateWaLink(name, talle, version, price) {
       const talleText = talle ? `\n👕 Talle: ${talle}` : '';
       const msg = encodeURIComponent(`Hola La Grada! Quiero consultar sobre:\n🏷️ ${name}${talleText}\n📦 Versión ${version}\n💰 Gs. ${price.toLocaleString('es-PY')}`);
-      document.getElementById('drawerWa1').href = `https://wa.me/595986304750?text=${msg}`;
-      document.getElementById('drawerWa2').href = `https://wa.me/595971544874?text=${msg}`;
+      document.getElementById('drawerWa1').href = `https://wa.me/595991416145?text=${msg}`;
     }
 
     function closeDrawer() {
